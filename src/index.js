@@ -41,6 +41,10 @@ class Task {
     set priority(val) {
         this.priority = val
     }
+
+    addSubtask = (task) => {
+        this.subtasks.append(task);
+    }
 }
 
 //has name, tasks, notes, sections. can get and change all of them
