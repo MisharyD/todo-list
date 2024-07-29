@@ -11,6 +11,7 @@ class Task {
         this.date = date;
         this.priority = priority;
         this.id = Task.currentId++;
+        this.completed = false;
     }
 
     get name () {
@@ -47,6 +48,14 @@ class Task {
 
     get subtasks() {
         return this.subtasks;
+    }
+
+    get completed(){
+        return this.completed
+    }
+
+    set completed(boolean){
+        this.completed = boolean
     }
 
     addSubtask = (task) => {
@@ -171,16 +180,14 @@ class Manager {
     //add new task, if no list is given add to inbox
     addTask(name = "", description = "", date = null, priority = null, listId = this.listList.find(list => list.name === "Inbox").id) 
     {
-        
         //add task to tasklist
         const task = new Task(name, description, date, priority);
         this.taskList.push(task);
 
         //add task to list
         const list = this.listList.find(list => list.id === listId);
-        if (list) {
+        if (list)
             list.addTask(task);
-        }
         else
             return false;
 
@@ -191,7 +198,8 @@ class Manager {
     changeTaskInfo(taskId, name, description, date, priority) 
     {
         const task = this.taskList.find(task => task.id === taskId);
-        if (task) {
+        if (task) 
+        {
             task.name = name;
             task.description = description;
             task.date = date;
@@ -216,8 +224,8 @@ class Manager {
     {
         const taskIndex = this.taskList.findIndex(task => task.id === taskId);
 
-        if (taskIndex !== -1) {
-
+        if (taskIndex !== -1) 
+        {
             //delete from taskList
             const task = this.taskList[taskIndex];
             this.taskList.splice(taskIndex, 1);
@@ -232,6 +240,33 @@ class Manager {
             return false;
     }
 
+    completeTask(taskId)
+    {
+        const taskIndex = this.taskList.findIndex(task => task.id === taskId);
+        if(taskIndex !== -1)
+            {
+                const task = this.taskList[taskIndex];
+                task.completeTask(true);
+
+                return true;
+            }
+        return false;
+    }
+
+    uncompleteTask(taskId)
+    {
+        const taskIndex = this.taskList.findIndex(task => task.id === taskId);
+        if(taskIndex !== -1)
+        {
+            const task = this.taskList[taskIndex];
+            task.completeTask(false);
+
+            return true;
+        }
+
+        return false;
+    }
+
 
     moveTaskFromList(taskId, fromListId, toListId) 
     {
@@ -243,19 +278,21 @@ class Manager {
         {
             //get task
             const task = fromList.tasks.find(task => task.id === taskId);
-            if (task) {
+            if (task) 
+            {
                 fromList.removeTask(task);
                 toList.addTask(task);
                 return true;
             }
-            return false;
+            else
+                return false;
         }
         return false;
     }
 
     //create new note and add to list, if no list is provided then add to inbox
-    addNote(name = "", description = "", listId = this.listList.find(list => list.name === "Inbox").id) {
-        
+    addNote(name = "", description = "", listId = this.listList.find(list => list.name === "Inbox").id) 
+    {
         //add note to note list
         const note = new Note(name, description);
         this.noteList.push(note);
@@ -272,24 +309,35 @@ class Manager {
     }
 
     //delete note 
-    removeNote(noteId, listId) {
+    removeNote(noteId, listId) 
+    {
         const noteIndex = this.noteList.findIndex(note => note.id === noteId);
-        if (noteIndex !== -1) {
+
+        //if note found
+        if (noteIndex !== -1) 
+        {
+            //remove note from notelist
             const note = this.noteList[noteIndex];
             this.noteList.splice(noteIndex, 1);
+
+            //delete note from list
             const list = this.listList.find(list => list.id === listId);
-            if (list) {
+            if (list)
                 list.removeNote(note);
-            }
         }
     }
+
 
     getAllListIds() {
         return this.listList.map(list => list.id);
     }
 
-    getListInfo(listId) {
+    //get list information including all it's tasks and notes give list id
+    getListInfo(listId) 
+    {
         const list = this.listList.find(list => list.id === listId);
+
+        //if list exists, return it's info
         if (list) {
             return {
                 name: list.name,
@@ -300,8 +348,12 @@ class Manager {
         return null;
     }
 
-    getTaskInfo(taskId) {
+    //get task information including all it's subtasks ids given the task id
+    getTaskInfo(taskId) 
+    {
         const task = this.taskList.find(task => task.id === taskId);
+
+        //if task exists
         if (task) {
             return {
                 name: task.name,
@@ -311,28 +363,41 @@ class Manager {
                 subtasks: task.subtasks.map(subtask => subtask.id)
             };
         }
-        return null;
+        return false;
     }
 
-    getTasksFromList(listId) {
+    //get tasks ids for a list given it's id
+    getTasksOfList(listId) 
+    {
         const list = this.listList.find(list => list.id === listId);
+
+        //if list exists return an array of all it's tasks ids
         if (list) {
             return list.tasks.map(task => task.id);
         }
         return [];
     }
 
-    getNotes(listId) {
+    //get notes ids of list given it's id
+    getNotesOfList(listId) 
+    {
         const list = this.listList.find(list => list.id === listId);
+
+        //if list exist return an array of all it's notes ids
         if (list) {
             return list.notes.map(note => note.id);
         }
         return [];
     }
 
-    getNoteInfo(noteId) {
+    //get information of note given it's id
+    getNoteInfo(noteId) 
+    {
         const note = this.noteList.find(note => note.id === noteId);
-        if (note) {
+
+        //if note exists return it's information
+        if (note) 
+        {
             return {
                 name: note.name,
                 description: note.description
