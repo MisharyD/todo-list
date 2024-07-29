@@ -42,13 +42,30 @@ class Task {
         this.priority = val
     }
 
+    get subtasks() {
+        return this.subtasks;
+    }
+
     addSubtask = (task) => {
         this.subtasks.append(task);
+    }
+
+    removeSubTask = (task) => {
+        this.subtasks.remove(task)
     }
 }
 
 //has name, tasks, notes, sections. can get and change all of them
-class List {}
+class List {
+    tasks = [];
+    notes = [];
+
+    constructor(name){
+        this.name = name;
+    }
+
+
+}
 
 //has title, description, can get and change all of them
 class Note {}
