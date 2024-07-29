@@ -1,5 +1,47 @@
 //has name, date, priority, subtasks, and desctiption a task. can get and change all of them
-class Task {}
+class Task {
+    subtasks = []
+
+    constructor(name ="", description ="", date = null, priority = null)
+    {
+        this.name = name;
+        this.description = description
+        this.date = date;
+        this.priority = priority;
+    }
+
+    get name () {
+        return this.name;
+    }
+
+    set name(val) {
+        this.name = val;
+    }
+
+    get description() {
+        return this.description
+    }
+
+    set description(val) {
+        this.description = val;
+    }
+
+    get date() {
+        return this.date;
+    }
+
+    set date(val) {
+        this.date =val;
+    }
+
+    get priority() {
+        return this.priority
+    }
+
+    set priority(val) {
+        this.priority = val
+    }
+}
 
 //has name, tasks, notes, sections. can get and change all of them
 class List {}
