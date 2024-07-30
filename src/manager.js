@@ -4,19 +4,33 @@ import { Task, List, Note } from  "./components"
 //changing info about a task or a list. contains an array for all tasks, lists and notes. 
 export default class Manager {
 
-    constructor() {
-        this._allTasks = {};
-        this._allLists = {};
-        this._allNotes = {};
+    constructor(allTasks = null, allLists = null, allNotes = null) {
+        if(allTasks != null, allLists != null, allNotes != null)
+        {
+            this._allTasks = allTasks;
+            this._allLists = allLists;
+            this._allNotes = allNotes;
 
-        this._today = new List("Today");
-        this._inbox = new List("Inbox");
-        this._next7 = new List("Next 7 Days");
-        
-
-        this._allLists[this._today.id] = this._today;
-        this._allLists[this._inbox.id] = this._inbox;
-        this._allLists[this._next7.id] = this._next7;
+            //these indexes should not change since they are created in that order.
+            this._inbox = this._allLists[0];
+            this._today = this._allLists[1];
+            this._next7 = this._allLists[1];
+        }
+        else
+        {
+            this._allTasks = {};
+            this._allLists = {};
+            this._allNotes = {};
+    
+            this._inbox = new List("Inbox");
+            this._today = new List("Today");
+            this._next7 = new List("Next 7 Days");
+            
+    
+            this._allLists[this._inbox.id] = this._inbox;
+            this._allLists[this._today.id] = this._today;
+            this._allLists[this._next7.id] = this._next7;
+        }
     }
 
     
@@ -93,6 +107,39 @@ export default class Manager {
         return list.id;
     }
 
+    //deletes list if it exists and all it's tasks and everywhere they appear in. return true if success, otherwise return false
+    deleteList(listId)
+    {
+        const list = this._allLists[listId];
+        if(list)
+        {
+            //delete the list's tasks
+
+            const tasks = list.tasks;
+            for(const taskId in tasks)
+            {
+                //delete it in other lists
+                for(const listId in this._allLists)
+                    {
+                        if(listId != list.id)
+                        this._allLists[listId].deleteTask(this._allTasks[taskId])
+                    }
+                //delete it in all tasks object
+                delete this._allTasks[taskId]
+            }
+
+            //delete notes (notes only appear in one list)
+            const notes = list.notes;
+            for(const noteId in notes)
+                delete this._allNotes[noteId]
+    
+            //delete the list 
+            delete this._allLists[listId];
+
+            return true;
+        }
+        return false;
+    }
     
     //delete task given task id. returns true if operation done successfully. otherwise false
     deleteTask(taskId) 
@@ -317,6 +364,8 @@ export default class Manager {
         }
         return [];
     }
+
+
 
     //special lists
 

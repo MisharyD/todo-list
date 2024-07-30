@@ -13,6 +13,7 @@ const Todo = (function ()
             console.log("3- Enter next 7 days list");
             console.log("4- Show all lists");
             console.log("5- Add new list");
+            console.log("6- Delete list");
             console.log("0- Exit");
         
             const choice = prompt("Enter your choice:");
@@ -35,6 +36,8 @@ const Todo = (function ()
                     break;
                 case '5':
                     addNewList();
+                case '6':
+                    deleteList();
                     break;
                 case '0':
                     console.log("Goodbye!");
@@ -117,6 +120,21 @@ const Todo = (function ()
                 console.log("Failed to add task.");
             }
             enterList(listId);
+        }
+
+        function deleteList() {
+            const listIds = todo.getAllListIds();
+            listIds.forEach(id => {
+                const listInfo = todo.getListInfo(id);
+                console.log(`List: ${listInfo.name} (ID: ${id})`);
+            });
+            const listId = prompt("Enter list ID to delete:");
+            if (todo.deleteList(listId)) {
+                console.log(`List with ID: ${listId} deleted.`);
+            } else {
+                console.log("Invalid list ID. Try again.");
+            }
+            displayMainOptions();
         }
         
         function addNewNote(listId) {
