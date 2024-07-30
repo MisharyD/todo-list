@@ -111,7 +111,7 @@ class List {
         this._tasks[task.id] = task;
     }
 
-    removeTask(task) {
+    deleteTask(task) {
         delete this._tasks[task.id];
     }
 
@@ -119,7 +119,7 @@ class List {
         this._notes[note.id] = note;
     }
 
-    removeNote(note) {
+    deleteNote(note) {
         delete this._notes[note.id];
     }
 }

@@ -20,7 +20,7 @@ export default class Manager {
     }
 
     
-    //add new task, if no list is given add to inbox. returns true if operation done successfully. otherwise false
+    //add new task, if no list is given add to inbox. returns task id if operation done successfully. otherwise false
     addTask({name = "", description = "", date = null, priority = null}, listId = null) 
     {
         //add task to allTasks
@@ -39,17 +39,15 @@ export default class Manager {
             if (list)
             {
                 list.addTask(task);
-                return true;
+                return task.id;
             }
             else
                 return false;
         }
-
-        return task.id;
     }
 
 
-    //add subtask in another task. mainTask is the parent task.  returns true if operation done successfully. otherwise false
+    //add subtask in another task. mainTask is the parent task. returns task id if operation done successfully. otherwise false
     addSubtask(mainTaskId, {name = "", description = "", date = null, priority = null})
     {
         const mainTask = this._allTasks[mainTaskId] 
@@ -61,7 +59,11 @@ export default class Manager {
     
             //add subtask to the subtask array in the maintask
             mainTask.addSubtask(subtask);
+
+            return subtask.id;
         }
+
+        return false;
     }
 
 
@@ -83,11 +85,11 @@ export default class Manager {
     }
 
     
-    //add new list
+    //add new list, returns list id
     addList(name = "") 
     {
         const list = new List(name);
-        this._allLists[list.id];
+        this._allLists[list.id] = list;
         return list.id;
     }
 
@@ -112,8 +114,13 @@ export default class Manager {
             }
             //not subtask, delete the task from any list that contains it
             else
-                this._allLists.forEach(list => list.removeTask(task));
-            
+            {
+                for(const listId in this._allLists)
+                {
+                    this._allLists[listId].deleteTask(task)
+                }
+            }
+                
             //delete from allTasks
             delete this._allTasks[taskId]
 
@@ -130,7 +137,7 @@ export default class Manager {
         const task = this._allTasks[taskId]
         if(task)
             {
-                task.completeTask(true);
+                task.completed(true);
                 return true;
             }
         return false;
@@ -142,7 +149,7 @@ export default class Manager {
         const task = this._allTasks[taskId]
         if(task)
             {
-                task.completeTask(false);
+                task.completed(false);
                 return true;
             }
         return false;
@@ -174,7 +181,7 @@ export default class Manager {
     }
 
     
-    //create new note and add to list, if no list is provided then add to inbox. returns true if done successfully. otherwise false
+    //create new note and add to list, if no list is provided then add to inbox. returns note id if done successfully. otherwise false
     addNote(name = "", description = "", listId = null) 
     {
         const note = new Note(name, description);
@@ -188,17 +195,16 @@ export default class Manager {
             const list = this._allLists[listId];
             if (list)
             {
+                //add note to the provided list
                 list.addNote(note);
-                return true;
+
+                //add note to note list
+                this._allNotes[note.id] = note
+                return note.id;
             }
             else
                 return false;
         }
-
-        //add note to note list
-        this._allNotes[note.id] = note
-
-        return note.id;
     }
 
     
