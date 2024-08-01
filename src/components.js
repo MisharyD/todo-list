@@ -1,18 +1,35 @@
 //has name, date, priority, subtasks, and desctiption a task. can get and change all of them
 class Task {
     static currentId = 0;
+    static allIds = new Array();
 
     _subtasks = {}
 
-    constructor(name, description, date, priority, parentTaskId)
+    constructor(name, description, date, priority, completed, parentTaskId, id)
     {
-        this._name = name;
-        this._description = description;
-        this._date = date;
-        this._priority = priority;
-        this._completed = false;
-        this._parentTaskId = parentTaskId 
-        this.id = Task.currentId++;
+        //used when creating a task normally
+        if(id == null){
+            this._name = name;
+            this._description = description;
+            this._date = date;
+            this._priority = priority;
+            this._completed = completed;
+            this._parentTaskId = parentTaskId 
+            this._id = Task.currentId++;
+        }
+        //used when loading data
+        else{
+            this._name = name;
+            this._description = description;
+            this._date = date;
+            this._priority = priority;
+            this._completed = completed;
+            this._parentTaskId = parentTaskId 
+            this._id = parseInt(id)
+
+            //used to know what is the max id after loading all tasks
+            Task.allIds.push(parseInt(id))
+        }
     }
 
     get name() {
@@ -47,6 +64,10 @@ class Task {
         this._priority = val;
     }
 
+    set subtasks(tasks){
+        this._subtasks = tasks;
+    }
+
     get subtasks() {
         return this._subtasks;
     }
@@ -67,6 +88,10 @@ class Task {
         this.completed = boolean
     }
 
+    get id(){
+        return this._id;
+    }
+
     addSubtask = (task) => {
         this._subtasks[task.id] = task;
     }
@@ -74,17 +99,33 @@ class Task {
     removeSubTask = (task) => {
         delete this._subtasks[task.id]
     }
+
+    static updateCurrentId(){
+        Task.currentId = Math.max(...Task.allIds) + 1;
+    }
 }
 
 //has name, tasks, notes. can get and change all of them
 class List {
     static currentId = 0;
+    static allIds = new Array();
 
-    constructor(name) {
-        this._name = name;
-        this._notes = {};
-        this._tasks = {};
-        this._id = List.currentId++;
+    constructor(name, id) {
+        //used when creating a list normally
+        if(id == null){
+            this._name = name;
+            this._notes = {};
+            this._tasks = {};
+            this._id = List.currentId++;
+        }
+        //used when loading data
+        else{
+            this._name = name;
+            this._notes = {};
+            this._tasks = {};
+            this._id = parseInt(id);
+            List.allIds.push(parseInt(id));
+        }
     }
 
     get name() {
@@ -95,8 +136,16 @@ class List {
         this._name = val;
     }
 
+    set tasks(tsks){
+        this._tasks = tsks;
+    }
+
     get tasks() {
         return this._tasks;
+    }
+
+    set notes(nts){
+        this._notes = nts;
     }
 
     get notes() {
@@ -122,16 +171,31 @@ class List {
     deleteNote(note) {
         delete this._notes[note.id];
     }
+
+    static updateCurrentId(){
+        List.currentId = Math.max(...List.allIds) + 1;
+    }
 }
 
 //has title, description, can get and change all of them
 class Note {
     static currentId = 0;
+    static allIds = new Array();
 
-    constructor(name, description){
-        this._name = name;
-        this._description = description;
-        this._id = Note.currentId++;
+    constructor(name, description, id){
+        //used when creating a note normally
+        if(id == null){
+            this._name = name;
+            this._description = description;
+            this._id = Note.currentId++;
+        }
+        else{
+            this._name = name;
+            this._description = description;
+            this._id = parseInt(id);
+
+            Note.allIds.push(parseInt(id));
+        }
     }
 
     get name() {
@@ -152,6 +216,10 @@ class Note {
 
     get id() {
         return this._id;
+    }
+
+    static updateCurrentId(){
+        Note.currentId = Math.max(...Note.allIds) + 1;
     }
 }
 

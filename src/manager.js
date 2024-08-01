@@ -4,20 +4,7 @@ import { Task, List, Note } from  "./components"
 //changing info about a task or a list. contains an array for all tasks, lists and notes. 
 export default class Manager {
 
-    constructor(allTasks = null, allLists = null, allNotes = null) {
-        if(allTasks != null, allLists != null, allNotes != null)
-        {
-            this._allTasks = allTasks;
-            this._allLists = allLists;
-            this._allNotes = allNotes;
-
-            //these indexes should not change since they are created in that order.
-            this._inbox = this._allLists[0];
-            this._today = this._allLists[1];
-            this._next7 = this._allLists[1];
-        }
-        else
-        {
+    constructor() {
             this._allTasks = {};
             this._allLists = {};
             this._allNotes = {};
@@ -25,20 +12,18 @@ export default class Manager {
             this._inbox = new List("Inbox");
             this._today = new List("Today");
             this._next7 = new List("Next 7 Days");
-            
-    
+        
             this._allLists[this._inbox.id] = this._inbox;
             this._allLists[this._today.id] = this._today;
             this._allLists[this._next7.id] = this._next7;
-        }
     }
 
     
     //add new task, if no list is given add to inbox. returns task id if operation done successfully. otherwise false
-    addTask({name = "", description = "", date = null, priority = null}, listId = null) 
+    addTask({name = "", description = "", date = null, priority = null, completed = false, parentTaskId = null, id = null}, listId = null) 
     {
         //add task to allTasks
-        const task = new Task(name, description, date, priority, null);
+        const task = new Task(name, description, date, priority,completed, parentTaskId, id);
         this._allTasks[task.id] = task;
 
         //add task to list
@@ -60,15 +45,14 @@ export default class Manager {
         }
     }
 
-
     //add subtask in another task. mainTask is the parent task. returns task id if operation done successfully. otherwise false
-    addSubtask(mainTaskId, {name = "", description = "", date = null, priority = null})
+    addSubtask(mainTaskId, {name = "", description = "", date = null, priority = null,completed = false, parentTaskId = null, id = null})
     {
         const mainTask = this._allTasks[mainTaskId] 
         if(mainTask)
         {
             //add subtask to allTasks
-            const subtask = new Task(name, description, date, priority, mainTaskId);
+            const subtask = new Task(name, description, date, priority,completed, parentTaskId, id);
             this._allTasks[subtask.id] = subtask;
     
             //add subtask to the subtask array in the maintask
@@ -365,8 +349,6 @@ export default class Manager {
         return [];
     }
 
-
-
     //special lists
 
     //returns today list's id 
@@ -382,5 +364,95 @@ export default class Manager {
      //returns next 7 days list's id 
      get next7(){
         return this._next7.id;
+    }
+
+    saveData()
+    {
+        const data = {
+            allTasks: this._allTasks,
+            allLists: this._allLists,
+            allNotes: this._allNotes
+        }
+
+        const jsonData = JSON.stringify(data);
+        localStorage.setItem("data", jsonData); 
+    }
+
+    loadData(){
+        if(!localStorage.getItem("data"))
+            return;
+        
+        const data = localStorage.getItem('data');
+        const parsedData = JSON.parse(localStorage.getItem('data'));
+
+        //rehydrate tasks
+        const allTasksJson = parsedData.allTasks
+        const allTasks = {};
+    
+        for (const id in allTasksJson) {
+            const taskData = allTasksJson[id];
+        
+            //recursively reconstruct subtasks
+            const reconstructTask = (taskData) => {
+                const task = new Task(
+                    taskData._name,
+                    taskData._description,
+                    taskData._date,
+                    taskData._priority,
+                    taskData._completed,
+                    taskData._parentTaskId,
+                    taskData._id
+                );
+        
+                // Recursively reconstruct subtasks
+                for (const subtaskId in taskData._subtasks) {
+                    task.addSubtask(reconstructTask(taskData._subtasks[subtaskId]));
+                }
+        
+                return task;
+            };
+        
+            allTasks[id] = reconstructTask(taskData);
+        }
+        Task.updateCurrentId()
+
+        //rehudrate notes
+        const allNotesJson = parsedData.allNotes
+        const allNotes = {};
+        for(const noteId in allNotesJson)
+            {
+                const note = new Note(allNotesJson[noteId]._name, allNotesJson[noteId]._description, noteId);
+                allNotes[noteId] = note;
+            }
+        Note.updateCurrentId();
+
+        //rehydrate lists
+        const allListsJson = parsedData.allLists
+        const allLists = {}
+        for(const listId in allListsJson)
+            {
+                const list = new List(allListsJson[listId]._name, listId);
+                
+                //add tasks
+                for(const taskId in allListsJson[listId]._tasks)
+                        list.addTask(allTasks[taskId])
+                
+                //add notes
+                for(const noteId in allListsJson[listId]._notes)
+                    list.addNote(allNotes[noteId])
+
+                allLists[listId] = list;
+            }
+        List.updateCurrentId()
+
+        //assign instance variables to the loaded data
+        this._allTasks = allTasks;
+        this._allLists = allLists;
+        this._allNotes = allNotes;
+
+        this._inbox = this._allLists[0];
+        this._today = this._allLists[1];
+        this._next7 = this._allLists[2];
+
     }
 }

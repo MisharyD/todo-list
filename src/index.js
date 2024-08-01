@@ -4,7 +4,8 @@ import Manager from "./manager"
 //currently for command line
 const Todo = (function ()
     {
-        let todo = new Manager();
+        let todo = new Manager()
+        todo.loadData();
 
         function displayMainOptions() {
             console.log("Options:");
@@ -14,6 +15,7 @@ const Todo = (function ()
             console.log("4- Show all lists");
             console.log("5- Add new list");
             console.log("6- Delete list");
+            console.log("7- Save data");
             console.log("0- Exit");
         
             const choice = prompt("Enter your choice:");
@@ -38,6 +40,8 @@ const Todo = (function ()
                     addNewList();
                 case '6':
                     deleteList();
+                case '7':
+                    saveData();
                     break;
                 case '0':
                     console.log("Goodbye!");
@@ -231,6 +235,13 @@ const Todo = (function ()
 
         }
         
+        function saveData()
+        {
+           todo.saveData();
+           todo.loadData();
+           //displayMainOptions();
+        }
+
         displayMainOptions();
         
     })();
