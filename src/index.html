@@ -4,8 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
+
 </head>
 <body>
+    <div class="side-bar">
+        <div class="main-lists">
+            <div class="inbox list current-list">
+                <svg style = "width:30px; fill:white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19,15H15A3,3 0 0,1 12,18A3,3 0 0,1 9,15H5V5H19M19,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" />
+                </svg>
+                <div class="list-title">Inbox</div>
+            </div>
+            <div class="today list">
+                <svg style = "width: 30px; fill:white;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19 3H18V1H16V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3M19 19H5V9H19V19M19 7H5V5H19V7Z" />
+                </svg>
+                <div class="list-title">Today</div>
+            </div>
+            <div class="next7 list">
+                <svg style = "width:30px; fill:white;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M11,17L15,9V7H9V9H13L9,17M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" />
+                </svg>
+                <div class="list-title">Next 7 days</div>
+            </div>
+        </div>
+
+        <div class="lists">
+            <div class="title-addList-container">
+                <div class="title">Lists</div>
+                <button class="addList">+</button>
+            </div>
+
+            <div class="listCard">
+                <div class="list-title">List1</div>
+                <svg class = "deleteButton" style = "width: 30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="completed">
+            <button class="showCompleted">Completed</button>
+        </div>
+    </div>
+
+    <div class="main" style = "display: none;">
+        <div class="list-title-delete-container">
+            <div class="list-title"></div>
+            <svg class = "deleteButton" style = "width: 30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+            </svg>
+        </div>
+
+        <form action="#" method = "dialog" class = "add-task-form">
+            <span>+</span>
+            <input type="text" placeholder="Add task to , Press Enter to save.">
+            <button class="date-toggle">
+                <svg style = "width: 30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19 3H18V1H16V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3M19 19H5V9H19V19M19 7H5V5H19V7Z" />
+                </svg>
+            </button>
+            <input type = "date" class = "add-task-date hidden">
+        </form>
+
+        <form action="" class = "add-notes" style="display: none;"> <!--for lists other than today and next7-->
+
+        </form> 
+
+        <div class="notes-tasks">
+            <div class="task-card">
+                <div class = "task-title">Title1</div>
+                <svg class = "deleteButton" style = "width: 30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                </svg>
+                <div class="task-date"></div>
+                <form action = "" class ="changeDate">
+                    <input type="date">
+                </form>
+            </div>
+
+            <div class="note-card">
+                <div class = "task-title">Title1</div>
+                <svg class = "deleteButton" style = "width: 30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="completed">
+
+        </div>
+    </div>
     
+    <div class="info">
+        <div class="date-checkbox">
+
+        </div>
+
+        <div class="title">
+
+        </div>
+
+        <div class="description">
+
+        </div>
+
+        <div class="sub-tasks">
+
+        </div>
+
+        <div class="add-subtask">
+
+        </div>
+    </div>
 </body>
 </html>
