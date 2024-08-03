@@ -1,9 +1,19 @@
+:root
+{
+    --side-bar-color:#1a1919;
+    --color2:#303030;
+    --left-padding:8px;
+    --main-icon-width:30px;
+}
+
 html, body {
     margin:0px;
+    box-sizing: border-box;
 }
 
 *{
     color:white;
+    box-sizing: border-box;
 }
 
 body
@@ -11,8 +21,7 @@ body
     display: grid;
     grid-template-columns: 1fr 3fr 3fr;
     background-color: #101010;
-    overflow: hidden;
-    height:100dvh;
+    height:100vh;
 }
 
 .hidden {

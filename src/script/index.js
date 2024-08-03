@@ -1,6 +1,8 @@
 import Manager from "./manager"
 import "../style/index.css"
 import "../style/sidebar.css"
+import "../style/main.css"
+
 
 
 //currently for command line
@@ -249,7 +251,7 @@ const Todo = function ()
     };
 
 const datePickerToggle = document.querySelector('.date-toggle');
-const datePicker = document.querySelector('.add-task-date');
+const datePicker = document.querySelector('.input-date');
 
 datePickerToggle.addEventListener('click', () => {
     datePicker.classList.toggle('hidden');

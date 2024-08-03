@@ -4,16 +4,12 @@
 
 .side-bar
 {
-    --side-bar-color:#1a1919;
-    --hover-color:#303030;
-    --left-padding:8px;
-    --main-icon-width:30px;
-
     background-color: var(--side-bar-color);
     display:flex;
     flex-direction: column;
     gap:2rem;
     padding:16px;
+    min-width: 250px;
 }
 
 .inbox-icon
@@ -55,7 +51,7 @@
 .list:hover
 {
     cursor: pointer;
-    background-color: var(--hover-color);
+    background-color: var(--color2);
 }
 
 .current-list
@@ -122,18 +118,19 @@
 
 .list-card:hover
 {
-    background-color: var(--hover-color);
+    background-color: var(--color2);
     cursor: pointer;
 }
 
 .delete-button
 {
     width: 20px; 
-    fill:white;
+    fill:var(--color2);
 }
+
 .delete-button:hover
 {
-    fill:red;
+    fill:rgb(125, 2, 2);
     cursor: pointer;
 }
 
@@ -148,6 +145,6 @@
 
 .completed:hover
 {
-    background-color: var(--hover-color);
+    background-color: var(--color2);
     cursor: pointer;
 }
