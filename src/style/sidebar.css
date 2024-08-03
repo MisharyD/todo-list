@@ -1,15 +1,50 @@
+*{
+    box-sizing: border-box;
+}
+
 .side-bar
 {
-    background-color: #101010;
+    --side-bar-color:#1a1919;
+    --hover-color:#303030;
+    --left-padding:8px;
+    --main-icon-width:30px;
+
+    background-color: var(--side-bar-color);
     display:flex;
     flex-direction: column;
     gap:2rem;
     padding:16px;
 }
 
+.inbox-icon
+{
+    width: var(--main-icon-width);
+    fill:white;
+}
+
+.today-icon
+{
+    width: var(--main-icon-width);
+    fill:white;
+}
+
+.next7-icon
+{
+    width: var(--main-icon-width);
+    fill:white;
+}
+
+.main-lists
+{
+    display: flex;
+    flex-direction: column;
+    gap:1rem;
+    font-size: 20px;
+}
+
 .list
 {
-    padding:8px 16px;
+    padding:8px var(--left-padding);
     display: flex;
     align-items: center;
     gap:0.8rem;
@@ -20,7 +55,7 @@
 .list:hover
 {
     cursor: pointer;
-    background-color: #272727;
+    background-color: var(--hover-color);
 }
 
 .current-list
@@ -28,10 +63,91 @@
     background-color: #3F3F3F;
 }
 
-.main-lists
+.title-addList-container
 {
     display: flex;
-    flex-direction: column;
-    gap:1rem;
+    align-items: center;
+    justify-content: space-between;
+    --font-size:24px;
+    padding:8px var(--left-padding);
+    margin-bottom: 16px;
 }
 
+.list-icon
+{
+    width:20px; 
+    fill:white;
+}
+
+.title-addList-container > .title
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:0.5rem;
+    color:#fffdfd;
+    font-size: var(--font-size);
+}
+
+.add-list
+{
+    background-color: var(--side-bar-color);
+    cursor: pointer;
+    font-size: var(--font-size);
+    border-radius:8px;
+    width:25px;
+    fill:white;
+}   
+
+.add-list:hover
+{
+    fill:#4772FA;
+}
+
+.list-card
+{
+    padding:8px var(--left-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.title-icon-container
+{
+    display:flex;
+    align-items: center;
+    gap:0.5rem;
+}
+
+.list-card:hover
+{
+    background-color: var(--hover-color);
+    cursor: pointer;
+}
+
+.delete-button
+{
+    width: 20px; 
+    fill:white;
+}
+.delete-button:hover
+{
+    fill:red;
+    cursor: pointer;
+}
+
+.completed
+{
+    display: flex;
+    align-items: center;
+    gap:0.5rem;
+    padding:8px;
+    border-radius: 8px;
+}
+
+.completed:hover
+{
+    background-color: var(--hover-color);
+    cursor: pointer;
+}

@@ -9,20 +9,20 @@
 <body>
     <div class="side-bar">
         <div class="main-lists">
-            <div class="inbox list current-list">
-                <svg style = "width:30px; fill:white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <div class="inbox list current-list" id = "i0">
+                <svg class = "inbox-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M19,15H15A3,3 0 0,1 12,18A3,3 0 0,1 9,15H5V5H19M19,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" />
                 </svg>
                 <div class="list-title">Inbox</div>
             </div>
-            <div class="today list">
-                <svg style = "width: 30px; fill:white;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <div class="today list" id = "i1">
+                <svg class = "today-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M19 3H18V1H16V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3M19 19H5V9H19V19M19 7H5V5H19V7Z" />
                 </svg>
                 <div class="list-title">Today</div>
             </div>
-            <div class="next7 list">
-                <svg style = "width:30px; fill:white;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <div class="next7 list" id = "i2">
+                <svg class = "next7-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M11,17L15,9V7H9V9H13L9,17M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" />
                 </svg>
                 <div class="list-title">Next 7 days</div>
@@ -31,20 +31,32 @@
 
         <div class="lists">
             <div class="title-addList-container">
-                <div class="title">Lists</div>
-                <button class="addList">+</button>
+                <div class="title">
+                    <span>Lists</span>
+                </div>
+                <svg class = "add-list" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 16H10V14H3M18 14V10H16V14H12V16H16V20H18V16H22V14M14 6H3V8H14M14 10H3V12H14V10Z" />
+                </svg>
             </div>
 
-            <div class="listCard">
-                <div class="list-title">List1</div>
-                <svg class = "deleteButton" style = "width: 30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <div class="list-card list">
+                <div class="title-icon-container">
+                    <svg class = "list-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M3,4H7V8H3V4M9,5V7H21V5H9M3,10H7V14H3V10M9,11V13H21V11H9M3,16H7V20H3V16M9,17V19H21V17H9" />
+                    </svg>
+                    <div class="list-title">List1</div>
+                </div>
+                <svg class = "delete-button"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
                 </svg>
             </div>
         </div>
 
         <div class="completed">
-            <button class="showCompleted">Completed</button>
+            <svg style = "width:20px; fill:white;"xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,5V19H5V5H19M10,17L6,13L7.41,11.58L10,14.17L16.59,7.58L18,9" />
+            </svg> 
+            <span>Completed</span>
         </div>
     </div>
 
