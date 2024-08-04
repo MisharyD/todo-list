@@ -2,7 +2,9 @@
 {
     --side-bar-color:#1a1919;
     --color2:#303030;
+    --color3:#3F3F3F;
     --left-padding:8px;
+    --main-background-color:#1E1E1E;
     --main-icon-width:30px;
 }
 
@@ -19,6 +21,32 @@
     font-size: 42px;
 }
 
+.toggle-tasks-notes-container
+{
+    display: flex;
+    gap:0.5rem;
+}
+
+.toggle-add-task, .toggle-add-note
+{
+    align-self: flex-end;
+    background-color: #1E1E1E;
+    padding:4px 8px;
+    border:0px;
+    border-radius: 8px;
+}
+
+.toggle-add-task:hover, .toggle-add-note:hover
+{
+    cursor: pointer;
+    background-color: var(--color2);
+}
+
+.active-add
+{
+    background-color: var(--color3);
+}
+
 .add-task-form
 {
     display:flex;
@@ -30,9 +58,15 @@
 {
     background-color:var(--color2);
     flex:1 1 auto;
-    border:0px;
-    padding:8px 16px;
+    font-size: 16px;
+    padding:12px 16px;
     border-radius: 8px;
+    border:0px;
+}
+
+.add-task-form .input-text:focus
+{
+    outline:1px solid #4772FA;
 }
 
 .date-toggle
@@ -52,6 +86,33 @@
     background-color: var(--color2);
 }
 
+.add-note-form
+{
+    display:flex;
+    align-items: center;
+    gap:0.5rem;
+}
+
+.add-note-form .input-text
+{
+    background-color:var(--color2);
+    flex:1 1 auto;
+    font-size: 16px;
+    padding:12px 16px;
+    border-radius: 8px;
+    border:0px;
+}
+
+.add-note-form .input-text:focus
+{
+    outline:1px solid #4772FA;
+}
+
+.hidden
+{
+    display: none;
+}
+
 .notes-tasks-container
 {
     display: flex;
@@ -63,13 +124,21 @@
 {
     display: flex;
     align-items: center;
+    padding:4px 8px;
+    border-radius: 8px;
     gap:0.5rem;
+}
+
+
+.task-card:hover
+{
+    background-color: var(--color3);
 }
 
 .task-card .title
 {
     flex: 1 1 auto;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .task-card .delete-button
@@ -85,13 +154,13 @@
 
 .complete-button
 {
-    width:25px;
+    width:22px;
     fill:var(--color2);
 }
 
 .complete-button:hover
 {
-    fill: #474747;
+    fill: #717171;
     cursor: pointer;
 }
 
@@ -100,7 +169,15 @@
     display: flex;
     align-items: center;
     gap:0.5em;
+    padding:4px 8px;
+    border-radius: 8px;
 }
+
+.note-card:hover
+{
+    background-color: var(--color3);
+}
+
 
 .note-icon
 {
@@ -112,5 +189,5 @@
 .note-card .title
 {
     flex: 1 1 auto;
-    font-size: 24px;
+    font-size: 20px;
 }

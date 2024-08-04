@@ -257,6 +257,27 @@ datePickerToggle.addEventListener('click', () => {
     datePicker.classList.toggle('hidden');
 });
 
+const toggleTaskForm = document.querySelector(".toggle-add-task");
+const toggleNoteForm = document.querySelector(".toggle-add-note");
 
+const addTaskForm = document.querySelector(".add-task-form");
+const addNoteForm = document.querySelector(".add-note-form"); 
 
+toggleTaskForm.addEventListener("click", () =>
+    {
+        toggleTaskForm.classList.toggle("active-add");
+        toggleNoteForm.classList.toggle("active-add");
+
+        addTaskForm.classList.toggle('hidden');
+        addNoteForm.classList.toggle('hidden');
+    })
+
+toggleNoteForm.addEventListener("click", () =>
+    {
+        toggleNoteForm.classList.toggle("active-add");
+        toggleTaskForm.classList.toggle("active-add");
+
+        addTaskForm.classList.toggle('hidden');
+        addNoteForm.classList.toggle('hidden');
+    })
 
