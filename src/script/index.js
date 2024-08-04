@@ -1,7 +1,9 @@
 import Manager from "./manager"
+import "../style/reset.css"
 import "../style/index.css"
 import "../style/sidebar.css"
 import "../style/main.css"
+import "../style/info.css"
 
 
 
@@ -250,6 +252,7 @@ const Todo = function ()
         
     };
 
+//toggle date picker for forms, add for every task later
 const datePickerToggle = document.querySelector('.date-toggle');
 const datePicker = document.querySelector('.input-date');
 
@@ -257,6 +260,22 @@ datePickerToggle.addEventListener('click', () => {
     datePicker.classList.toggle('hidden');
 });
 
+//toggle add list form
+const addListForm = document.querySelector(".add-list-form")
+const addListButton = document.querySelector(".add-list-button")
+const cancelListFormButton = document.querySelector(".cancel-list-form")
+
+addListButton.addEventListener("click", () => 
+    {
+        addListForm.show();
+
+    })
+cancelListFormButton.addEventListener("click", () =>
+    {
+        addListForm.close();
+    })
+
+//toggle task and note forms 
 const toggleTaskForm = document.querySelector(".toggle-add-task");
 const toggleNoteForm = document.querySelector(".toggle-add-note");
 
@@ -281,3 +300,9 @@ toggleNoteForm.addEventListener("click", () =>
         addNoteForm.classList.toggle('hidden');
     })
 
+//toggle subtask form
+let addSubtaskButton = document.querySelector(".add-subtask-button");
+addSubtaskButton.addEventListener("click", () => 
+    {
+        document.querySelector(".add-subtask .add-task-form").classList.toggle("hidden");
+    })

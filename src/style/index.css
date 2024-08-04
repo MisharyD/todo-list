@@ -2,8 +2,11 @@
 {
     --side-bar-color:#1a1919;
     --color2:#303030;
+    --color3:#3F3F3F;
     --left-padding:8px;
+    --main-background-color:#1E1E1E;
     --main-icon-width:30px;
+    --border-color:#292929;
 }
 
 html, body {
@@ -19,8 +22,8 @@ html, body {
 body
 {
     display: grid;
-    grid-template-columns: 1fr 3fr 3fr;
-    background-color: #101010;
+    grid-template-columns: 1fr 3fr 2fr;
+    background-color:var(--main-background-color) ;
     height:100vh;
 }
 

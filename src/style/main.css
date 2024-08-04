@@ -1,19 +1,10 @@
-:root
-{
-    --side-bar-color:#1a1919;
-    --color2:#303030;
-    --color3:#3F3F3F;
-    --left-padding:8px;
-    --main-background-color:#1E1E1E;
-    --main-icon-width:30px;
-}
-
 .main
 {
     display:flex;
     flex-direction: column;
     gap:1rem;
     padding:16px;
+    border-right: 1px solid var(--border-color);
 }
 
 .main .list-title
@@ -68,6 +59,7 @@
 {
     outline:1px solid #4772FA;
 }
+
 
 .date-toggle
 {
@@ -127,6 +119,7 @@
     padding:4px 8px;
     border-radius: 8px;
     gap:0.5rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 
@@ -171,6 +164,12 @@
     gap:0.5em;
     padding:4px 8px;
     border-radius: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.note-card:last-child
+{
+    border:0px;
 }
 
 .note-card:hover

@@ -1,0 +1,64 @@
+
+.info
+{
+    display:flex;
+    flex-direction: column;
+    gap:2rem;
+    padding:16px;
+}
+
+.hidden
+{
+    display: none;
+}
+
+.info > .date-checkbox-container .date
+{
+    font-size: 24px;
+}
+
+.info > .date-checkbox-container .complete-button
+{
+    width:30px;
+}
+
+.info > .title 
+{
+    font-size: 18px;
+}
+
+.date-checkbox-container
+{
+    display: flex;
+    gap:1rem;
+}
+
+.add-subtask-button
+{
+    background-color: var(--main-background-color);
+    color: #4772FA;
+    font-size: 14px;
+    border: 0px;
+    margin-bottom: 8px;
+}
+
+.add-subtask-button:hover
+{
+    cursor: pointer;
+}
+
+.add-subtask .add-task-form .input-text
+{
+    background-color:var(--color2);
+    flex:1 1 auto;
+    font-size: 14px;
+    padding:8px 12px;
+    border-radius: 8px;
+    border:0px;
+}
+
+.add-subtask .add-task-form .input-text:focus
+{
+    outline:1px solid #4772FA;
+}
+
