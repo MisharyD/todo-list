@@ -1,12 +1,13 @@
 :root
 {
     --side-bar-color:#1a1919;
-    --color2:#303030;
-    --color3:#3F3F3F;
-    --left-padding:8px;
-    --main-background-color:#1E1E1E;
-    --main-icon-width:30px;
+    --hover-color:#262626;
+    --active-color:#3F3F3F;
     --border-color:#292929;
+    --main-background-color:#1E1E1E;
+    --complete-button-color:#717171;
+    --left-padding:8px;
+    --main-icon-width:30px;
 }
 
 html, body {

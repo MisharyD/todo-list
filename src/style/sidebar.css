@@ -54,12 +54,12 @@
 .list:hover
 {
     cursor: pointer;
-    background-color: var(--color2);
+    background-color: var(--hover-color);
 }
 
 .current-list
 {
-    background-color: #3F3F3F;
+    background-color: var(--active-color);
 }
 
 .title-addList-container
@@ -106,7 +106,7 @@
 .add-list-form
 {
     background-color: var(--main-background-color);
-    border:1px solid #3F3F3F;
+    border:1px solid var(--active-color);
     padding:16px 32px;
     position: absolute;
     top: 30%;
@@ -121,16 +121,26 @@
 
 .add-list-form input[type="button"]
 {
-    background-color: var(--color2);
     border:0px;
+    padding:8px 12px;
     cursor: pointer;
 }
 
 .add-list-form .text-input-list-form
 {
-    background-color: var(--color2);
+    background-color: var(--hover-color);
     border:0px;
     outline: 1px solid #4772FA;
+}
+
+.submit-list-form
+{
+    background-color:#4772FA;
+}
+
+.cancel-list-form
+{
+    background-color:var(--active-color);
 }
 
 .list-card
@@ -151,14 +161,14 @@
 
 .list-card:hover
 {
-    background-color: var(--color2);
+    background-color: var(--hover-color);
     cursor: pointer;
 }
 
 .delete-button
 {
+    fill: var(--complete-button-color);
     width: 20px; 
-    fill:var(--color2);
 }
 
 .delete-button:hover
@@ -178,7 +188,7 @@
 
 .completed:hover
 {
-    background-color: var(--color2);
+    background-color: var(--hover-color);
     cursor: pointer;
 }
 

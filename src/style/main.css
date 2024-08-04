@@ -30,12 +30,12 @@
 .toggle-add-task:hover, .toggle-add-note:hover
 {
     cursor: pointer;
-    background-color: var(--color2);
+    background-color: var(--hover-color);
 }
 
 .active-add
 {
-    background-color: var(--color3);
+    background-color: var(--active-color);
 }
 
 .add-task-form
@@ -47,7 +47,7 @@
 
 .add-task-form .input-text
 {
-    background-color:var(--color2);
+    background-color:var(--hover-color);
     flex:1 1 auto;
     font-size: 16px;
     padding:12px 16px;
@@ -64,18 +64,18 @@
 .date-toggle
 {
     width: 20px;
-    fill:var(--color2)
+    fill:var(--complete-button-color)
 }
 
 .date-toggle:hover
 {
     cursor: pointer;
-    fill:black;
+    fill:rgb(96, 94, 94);
 }
 
 .input-date
 {
-    background-color: var(--color2);
+    background-color: var(--active-color);
 }
 
 .add-note-form
@@ -87,7 +87,7 @@
 
 .add-note-form .input-text
 {
-    background-color:var(--color2);
+    background-color:var(--hover-color);
     flex:1 1 auto;
     font-size: 16px;
     padding:12px 16px;
@@ -122,10 +122,23 @@
     border-bottom: 1px solid var(--border-color);
 }
 
+.show-subtasks-button
+{
+    width:15px;
+    fill:var(--complete-button-color);
+    cursor:pointer;
+}
+
+.hide-subtasks-button
+{
+    width:15px;
+    fill:var(--complete-button-color);
+    cursor:pointer;
+}
 
 .task-card:hover
 {
-    background-color: var(--color3);
+    background-color: var(--hover-color);
 }
 
 .task-card .title
@@ -136,7 +149,6 @@
 
 .task-card .delete-button
 {
-    fill:var(--color2);
     width: 20px;
 }
 
@@ -148,12 +160,12 @@
 .complete-button
 {
     width:22px;
-    fill:var(--color2);
+    fill:var(--complete-button-color);
 }
 
 .complete-button:hover
 {
-    fill: #717171;
+    fill: #7e7d7d;
     cursor: pointer;
 }
 
@@ -174,14 +186,14 @@
 
 .note-card:hover
 {
-    background-color: var(--color3);
+    background-color: var(--hover-color);
 }
 
 
 .note-icon
 {
     width:20px;
-    fill:var(--color2);
+    fill:var(--complete-button-color);
     margin-right: 7px;
 }
 
@@ -189,4 +201,9 @@
 {
     flex: 1 1 auto;
     font-size: 20px;
+}
+
+.hidden
+{
+    display:none;
 }

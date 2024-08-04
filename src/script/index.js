@@ -8,7 +8,7 @@ import "../style/info.css"
 
 
 //currently for command line
-const Todo = function ()
+const Todocommand = function ()
     {
         let todo = new Manager()
         todo.loadData();
@@ -251,6 +251,18 @@ const Todo = function ()
         displayMainOptions();
         
     };
+
+
+const Todo = (function (){
+    
+})()
+
+
+
+
+
+
+
 
 //toggle date picker for forms, add for every task later
 const datePickerToggle = document.querySelector('.date-toggle');
