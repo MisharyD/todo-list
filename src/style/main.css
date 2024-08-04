@@ -1,4 +1,4 @@
-.main
+.list-container
 {
     display:flex;
     flex-direction: column;
@@ -7,7 +7,7 @@
     border-right: 1px solid var(--border-color);
 }
 
-.main .list-title
+.list-container .list-title
 {
     font-size: 42px;
 }

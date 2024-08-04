@@ -253,9 +253,84 @@ const Todocommand = function ()
     };
 
 
-const Todo = (function (){
+const todo = (function (){
+
+    const todo = new Manager();
     
-})()
+    function init()
+    {
+        //containers
+        const allListContainer = document.querySelector(".all-lists");
+        const listContainer = document.querySelector(".list-container");
+        const infoTaskContainer = document.querySelector(".info-task");
+        const infoNoteontainer = document.querySelector(".info-note");
+        
+        //listeners
+        const inboxButton = document.querySelector(".inbox");
+        const todayButton = document.querySelector(".today");
+        const next7Button = document.querySelector(".next7");
+
+        const addTaskForm = document.querySelector(".add-task-form");
+        const dateToggleButton = document.querySelector(".date-toggle");
+
+        const addListForm = document.querySelector(".add-list-form")
+        const addListButton = document.querySelector(".submit-list-button")
+        const cancelListFormButton = document.querySelector(".cancel-list-form");
+
+        const changeTaskInfoButton = document.querySelector(".submit-change-task-button");
+        const changeNoteInfoButton = document.querySelector(".submit-change-note-button");
+        
+        inboxButton.addEventListener("click", loadList(0));
+        todayButton.addEventListener("click", loadList(1));
+        next7Button.addEventListener("click", loadList(2));
+
+        addTaskForm.addEventListener("submit", handleAddtask);
+        dateToggleButton.addEventListener('click', () => {
+            datePicker.classList.toggle('hidden');
+        });
+
+        addListButton.addEventListener("click", () => addListForm.show());
+        cancelListFormButton.addEventListener("click", () => addListForm.close());
+        addListForm.addEventListener("submit", handleAddList)
+
+        changeTaskInfoButton.addEventListener("submit", handleChangeTaskInfo)
+        changeNoteInfoButton.addEventListener("submit", handleChangeNoteInfo)
+
+    }
+
+    //task/note functions
+
+    //to remove: should call loadList
+    //handles submiting the add task form 
+    function handleAddtask(e){}
+
+    function handleAddList(e){}
+
+    function handleDeleteTask(e){}
+
+    //to remove: this handler get assgined to tasks 
+    function loadTaskInfo(taskId){}
+
+    function loadNoteInfo(noteId){}
+
+    function handleTaskSelect(e){}
+
+    function handleCompleteTask(e){}
+
+    //list functions
+
+    //to remove: should use listContainer
+    //loads list's tasks and notes and assign event listeners to them that calls the handle task select function
+    function loadList(listId){}
+
+    //to remove: should use allListContainer
+    function loadAllLists(){}
+
+    function handleDeleteList(e){}
+
+
+    init();
+})();
 
 
 

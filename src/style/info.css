@@ -7,30 +7,62 @@
     padding:16px;
 }
 
-.hidden
+.info-task .change-task-form
 {
-    display: none;
-}
-
-.info > .date-checkbox-container .date
-{
-    font-size: 24px;
-}
-
-.info > .date-checkbox-container .complete-button
-{
-    width:30px;
-}
-
-.info > .title 
-{
-    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    gap:1rem;
 }
 
 .date-checkbox-container
 {
     display: flex;
     gap:1rem;
+}
+
+.info-task .change-task-form .date-checkbox-container .date
+{
+    font-size: 24px;
+}
+
+.info-task .change-task-form .date-checkbox-container .complete-button
+{
+    width:30px;
+}
+
+.info-task .change-task-form .title 
+{
+    font-size: 18px;
+    border: 0px;
+    border-radius: 8px;
+    background-color: var(--hover-color);
+    padding:8px 12px;   
+}
+
+.info-task .change-task-form .title:focus 
+{
+    outline: 1px solid #4772FA;
+}
+
+.info-task .change-task-form .description 
+{
+    font-size: 18px;
+    background-color: var(--hover-color);
+    border:0px;
+}
+.info-task .change-task-form .description:hover 
+{
+    outline: 1px solid #4772FA;    
+}
+
+.info-task .submit-change-task-button
+{
+    background-color: #4772FA;
+    cursor: pointer;
+    width: min-content;
+    padding:8px 12px;
+    border:0px;
+    border-radius: 8px;
 }
 
 .add-subtask-button
@@ -62,3 +94,50 @@
     outline:1px solid #4772FA;
 }
 
+.info-note .change-note-form
+{
+    display: flex;
+    flex-direction: column;
+    gap:1rem;
+}
+
+.info-note .change-note-form .title 
+{
+    font-size: 18px;
+    border: 0px;
+    border-radius: 8px;
+    background-color: var(--hover-color);
+    padding:8px 12px;   
+}
+
+.info-task .change-note-form .title:focus 
+{
+    outline: 1px solid #4772FA;
+}
+
+.info-note .change-note-form .description 
+{
+    font-size: 18px;
+    background-color: var(--hover-color);
+    border:0px;
+    border-radius: 8px;
+}
+.info-note .change-note-form .description:focus 
+{
+    outline: 1px solid #4772FA;    
+}
+
+.info-note .submit-change-note-button
+{
+    background-color: #4772FA;
+    cursor: pointer;
+    width: min-content;
+    padding:8px 12px;
+    border:0px;
+    border-radius: 8px;
+}
+
+.hidden
+{
+    display: none;
+}
