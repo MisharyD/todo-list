@@ -213,13 +213,13 @@ export default class Manager {
 
     
     //create new note and add to list, if no list is provided then add to inbox. returns note id if done successfully. otherwise false
-    addNote(name = "", description = "", listId = null) 
+    addNote({name = "", description = ""}, listId = null) 
     {
         const note = new Note(name, description);
 
         //default list 
         if(listId == null)
-            this._inbox.addNote(listId)
+            this._inbox.addNote(note)
         //other list
         else
         {

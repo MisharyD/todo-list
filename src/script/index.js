@@ -256,10 +256,16 @@ const Todocommand = function ()
 const todo = (function (){
 
     const todo = new Manager();
+    todo.addTask({name:'task1'},0)
+    todo.addTask({name:'task2'},0)
+    todo.addTask({name:'task3'},0)
+    todo.addTask({name:'task4'},0)
+    todo.addNote({name:"note1"},0)
 
     //main containers
     const allListContainer = document.querySelector(".all-lists");
     const listContainer = document.querySelector(".list-container");
+    const listTaskNoteContainer = document.querySelector(".notes-tasks-container")
     const infoTaskContainer = document.querySelector(".info-task");
     const infoNoteontainer = document.querySelector(".info-note");
     
@@ -270,7 +276,6 @@ const todo = (function (){
     const priorityToggleButton = document.querySelector('.priority-flag-button');
     const showAddListFormButton = document.querySelector(".add-list-button")
     const cancelListFormButton = document.querySelector(".cancel-list-form")
-
 
     //listeners for the main lists
     const inboxButton = document.querySelector(".inbox");
@@ -300,9 +305,9 @@ const todo = (function (){
         priorityToggleButton.addEventListener("click", togglePriorityInput)
         
         //listeners for the main lists
-        inboxButton.addEventListener("click", loadList(0));
-        todayButton.addEventListener("click", loadList(1));
-        next7Button.addEventListener("click", loadList(2));
+        inboxButton.addEventListener("click", handleListSelect);
+        todayButton.addEventListener("click", handleListSelect);
+        next7Button.addEventListener("click", handleListSelect);
 
         addTaskForm.addEventListener("submit", handleAddtask);
         datePicker.addEventListener("input", displaySelectedDate);
@@ -315,9 +320,12 @@ const todo = (function (){
         changeTaskInfoButton.addEventListener("submit", handleChangeTaskInfo)
         changeNoteInfoButton.addEventListener("submit", handleChangeNoteInfo)
 
+        //load inbox
+        loadList(0);
     }
 
     //functions for displaying and closing things
+
     function displayAddListForm()
     {
         addListForm.show();
@@ -339,12 +347,6 @@ const todo = (function (){
         priorityPicker.classList.toggle('hidden')
     }
 
-    //task/note functions
-
-    //to remove: should call loadList
-    //handles submiting the add task form 
-    function handleAddtask(e){}
-
     function displaySelectedPriority(e)
     {
         taskPriority.classList.remove("hidden");
@@ -357,34 +359,147 @@ const todo = (function (){
         taskDate.textContent = e.target.value;
     } 
 
-    function handleDeleteTask(e){}
-    
-    //to remove: this handler get assgined to tasks 
+    //task/note functions
+
+    //to remove: should call loadList
+    //handles submiting the add task form 
+    function handleAddtask(e)
+    {
+        let name = addTaskForm.elements["name"];
+        let date = addTaskForm.elements["date"]
+        let priority = addTaskForm.elements["priority"];  
+
+    }
+
+
+    function handleDeleteTask(e)
+    {
+        e.stopPropagation()
+        console.log("task deleted")
+    }
+
+    function handleDeleteNote(e)
+    {
+        e.stopPropagation()
+        console.log("note deleted")
+    }
+     
     function loadTaskInfo(taskId){}
     
     function loadNoteInfo(noteId){}
     
-    function handleTaskSelect(e){}
+    function handleTaskSelect(e)
+    {
+        console.log("task selected")
+    }
+
+    function handleNoteSelect(e)
+    {
+        console.log("note selected")
+    }
     
-    function handleCompleteTask(e){}
+    function handleCompleteTask(e){
+        e.stopPropagation()
+        console.log("completed")
+    }
     
     function handleChangeTaskInfo(e){}
     
     function handleChangeNoteInfo(e){}
     
     //list functions
+
     function handleAddList(e)
     {
         console.log("test")
         closeAddListForm();
     }
 
-    //to remove: should use listContainer
-    //loads list's tasks and notes and assign event listeners to them that calls the handle task select function
-    function loadList(listId){}
+    //loads list's tasks and notes and assign event listeners to cards
+    function loadList(listId)
+    {
+        //get list info;
+        const listInfo = todo.getListInfo(listId);
+
+        //assign id to listContainer
+        listContainer.setAttribute("id", "i" + listId);
+
+        //assign list title
+        listContainer.querySelector(".list-title").textContent = listInfo.name;
+
+        //load tasks and notes
+
+        const noteIds = listInfo.notes;
+            for(let i =0; i<noteIds.length; i++)
+                {
+                    //get a note card
+                    const noteCard = document.querySelector(".note-card.structure").cloneNode(true);
+                    noteCard.classList.remove("structure", "hidden");
+
+                    //assign note information and event listeners
+
+                    const noteInfo = todo.getNoteInfo(noteIds[i]);
+                    //card
+                    noteCard.addEventListener("click", handleNoteSelect)
+                    noteCard.setAttribute("id", "i" + noteIds[i]);
+
+                    //title
+                    noteCard.querySelector(".title").textContent = noteInfo.name;
+
+                    //delete button
+                    noteCard.querySelector(".delete-button").addEventListener("click", handleDeleteNote);
+
+                    listTaskNoteContainer.append(noteCard);
+                } 
+
+        const taskIds = listInfo.tasks;
+        for(let i =0; i<taskIds.length; i++)
+            {
+                //get a task card
+                const taskCard = document.querySelector(".task-card.structure").cloneNode(true);
+                taskCard.classList.remove("structure", "hidden");
+
+                //assign task information and eventlisteners to elemenets
+
+                let taskInfo = todo.getTaskInfo(taskIds[i]);
+                //card
+                taskCard.setAttribute("id", "i" + taskIds[i]);
+                taskCard.addEventListener("click", handleTaskSelect)
+
+                //complete button listener and title
+                taskCard.querySelector(".complete-button").addEventListener("click", handleCompleteTask);
+                taskCard.querySelector(".title").textContent = taskInfo.name;
+
+                //task date
+                if(taskInfo.date != "")
+                    {
+                        const taskDateContainer = taskCard.querySelector(".task-date")
+                        taskDateContainer.textContent = taskInfo.date
+                        taskDateContainer.classList.remove("hidden");
+                    }
+                
+                //task priotiry
+                if(taskInfo.priority != "")
+                    {
+                        const taskPriorityContainer = taskCard.querySelector(".task-priority");
+                        taskPriorityContainer.textContent = taskInfo.priority;
+                        taskPriorityContainer.classList.remove("hidden");
+                    }
+
+                taskCard.querySelector(".delete-button").addEventListener("click", handleDeleteTask);
+                
+                listTaskNoteContainer.append(taskCard);
+            }
+    }
 
     //to remove: should use allListContainer
     function loadAllLists(){}
+
+    //get assigned to all lists
+    function handleListSelect(e)
+    {
+
+    }
 
     function handleDeleteList(e){}
 
