@@ -256,46 +256,87 @@ const Todocommand = function ()
 const todo = (function (){
 
     const todo = new Manager();
+
+    //main containers
+    const allListContainer = document.querySelector(".all-lists");
+    const listContainer = document.querySelector(".list-container");
+    const infoTaskContainer = document.querySelector(".info-task");
+    const infoNoteontainer = document.querySelector(".info-note");
+    
+    //listeners
+
+    //listeners related to displaying things
+    const dateToggleButton = document.querySelector(".date-toggle");
+    const priorityToggleButton = document.querySelector('.priority-flag-button');
+    const showAddListFormButton = document.querySelector(".add-list-button")
+    const cancelListFormButton = document.querySelector(".cancel-list-form")
+
+
+    //listeners for the main lists
+    const inboxButton = document.querySelector(".inbox");
+    const todayButton = document.querySelector(".today");
+    const next7Button = document.querySelector(".next7");
+
+    //listerner related for adding tasks
+    const addTaskForm = document.querySelector(".add-task-form");
+    const datePicker = document.querySelector('.input-date');
+    const taskDate = document.querySelector(".task-date")
+    const priorityPicker = document.querySelector('.priority-container');
+    const taskPriority = document.querySelector(".task-priority");
+
+
+    //listerner related for adding lists
+    const addListForm = document.querySelector(".add-list-form")
+    const submitListFormButton = document.querySelector(".submit-list-form")
+
+    //listerner related for changing task and notes information in the info section
+    const changeTaskInfoButton = document.querySelector(".submit-change-task-button");
+    const changeNoteInfoButton = document.querySelector(".submit-change-note-button");
     
     function init()
     {
-        //containers
-        const allListContainer = document.querySelector(".all-lists");
-        const listContainer = document.querySelector(".list-container");
-        const infoTaskContainer = document.querySelector(".info-task");
-        const infoNoteontainer = document.querySelector(".info-note");
+        //listeners related to displaying things
+        dateToggleButton.addEventListener('click', toggleDateInput);
+        priorityToggleButton.addEventListener("click", togglePriorityInput)
         
-        //listeners
-        const inboxButton = document.querySelector(".inbox");
-        const todayButton = document.querySelector(".today");
-        const next7Button = document.querySelector(".next7");
-
-        const addTaskForm = document.querySelector(".add-task-form");
-        const dateToggleButton = document.querySelector(".date-toggle");
-
-        const addListForm = document.querySelector(".add-list-form")
-        const addListButton = document.querySelector(".submit-list-button")
-        const cancelListFormButton = document.querySelector(".cancel-list-form");
-
-        const changeTaskInfoButton = document.querySelector(".submit-change-task-button");
-        const changeNoteInfoButton = document.querySelector(".submit-change-note-button");
-        
+        //listeners for the main lists
         inboxButton.addEventListener("click", loadList(0));
         todayButton.addEventListener("click", loadList(1));
         next7Button.addEventListener("click", loadList(2));
 
         addTaskForm.addEventListener("submit", handleAddtask);
-        dateToggleButton.addEventListener('click', () => {
-            datePicker.classList.toggle('hidden');
-        });
+        datePicker.addEventListener("input", displaySelectedDate);
+        priorityPicker.addEventListener("input", displaySelectedPriority);
 
-        addListButton.addEventListener("click", () => addListForm.show());
-        cancelListFormButton.addEventListener("click", () => addListForm.close());
-        addListForm.addEventListener("submit", handleAddList)
+        showAddListFormButton.addEventListener("click", displayAddListForm);
+        cancelListFormButton.addEventListener("click", closeAddListForm);
+        submitListFormButton.addEventListener("click", handleAddList)
 
         changeTaskInfoButton.addEventListener("submit", handleChangeTaskInfo)
         changeNoteInfoButton.addEventListener("submit", handleChangeNoteInfo)
 
+    }
+
+    //functions for displaying and closing things
+    function displayAddListForm()
+    {
+        addListForm.show();
+    }
+    
+    function closeAddListForm()
+    {
+        addListForm.querySelector('input[name="name"]').value = "";
+        addListForm.close();
+    }
+
+    function toggleDateInput()
+    {
+        datePicker.classList.toggle('hidden');
+    }
+
+    function togglePriorityInput()
+    {
+        priorityPicker.classList.toggle('hidden')
     }
 
     //task/note functions
@@ -304,20 +345,39 @@ const todo = (function (){
     //handles submiting the add task form 
     function handleAddtask(e){}
 
-    function handleAddList(e){}
+    function displaySelectedPriority(e)
+    {
+        taskPriority.classList.remove("hidden");
+        taskPriority.textContent = e.target.value;
+    }
+
+    function displaySelectedDate(e)
+    {
+        taskDate.classList.remove("hidden");
+        taskDate.textContent = e.target.value;
+    } 
 
     function handleDeleteTask(e){}
-
+    
     //to remove: this handler get assgined to tasks 
     function loadTaskInfo(taskId){}
-
+    
     function loadNoteInfo(noteId){}
-
+    
     function handleTaskSelect(e){}
-
+    
     function handleCompleteTask(e){}
-
+    
+    function handleChangeTaskInfo(e){}
+    
+    function handleChangeNoteInfo(e){}
+    
     //list functions
+    function handleAddList(e)
+    {
+        console.log("test")
+        closeAddListForm();
+    }
 
     //to remove: should use listContainer
     //loads list's tasks and notes and assign event listeners to them that calls the handle task select function
@@ -333,34 +393,7 @@ const todo = (function (){
 })();
 
 
-
-
-
-
-
-
-//toggle date picker for forms, add for every task later
-const datePickerToggle = document.querySelector('.date-toggle');
-const datePicker = document.querySelector('.input-date');
-
-datePickerToggle.addEventListener('click', () => {
-    datePicker.classList.toggle('hidden');
-});
-
 //toggle add list form
-const addListForm = document.querySelector(".add-list-form")
-const addListButton = document.querySelector(".add-list-button")
-const cancelListFormButton = document.querySelector(".cancel-list-form")
-
-addListButton.addEventListener("click", () => 
-    {
-        addListForm.show();
-
-    })
-cancelListFormButton.addEventListener("click", () =>
-    {
-        addListForm.close();
-    })
 
 //toggle task and note forms 
 const toggleTaskForm = document.querySelector(".toggle-add-task");

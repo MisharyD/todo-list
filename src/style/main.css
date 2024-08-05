@@ -78,6 +78,18 @@
     background-color: var(--active-color);
 }
 
+.priority-flag-button
+{
+    width:20px;
+    fill: var(--complete-button-color);
+    cursor: pointer;
+}
+
+.priority-flag-button:hover
+{
+    fill:rgb(96, 94, 94);
+}
+
 .add-note-form
 {
     display:flex;
