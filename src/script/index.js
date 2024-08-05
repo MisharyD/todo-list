@@ -240,13 +240,6 @@ const Todocommand = function ()
 
 
         }
-        
-        function saveData()
-        {
-           todo.saveData();
-           todo.loadData();
-           //displayMainOptions();
-        }
 
         displayMainOptions();
         
@@ -256,11 +249,6 @@ const Todocommand = function ()
 const todo = (function (){
 
     const todo = new Manager();
-    todo.addTask({name:'task1'},0)
-    todo.addTask({name:'task2'},0)
-    todo.addTask({name:'task3'},0)
-    todo.addTask({name:'task4'},0)
-    todo.addNote({name:"note1"},0)
 
     //main containers
     const allListContainer = document.querySelector(".all-lists");
@@ -282,12 +270,13 @@ const todo = (function (){
     const todayButton = document.querySelector(".today");
     const next7Button = document.querySelector(".next7");
 
-    //listerner related for adding tasks
+    //listerner related for adding tasks and notes
     const addTaskForm = document.querySelector(".add-task-form");
     const datePicker = document.querySelector('.input-date');
-    const taskDate = document.querySelector(".task-date")
     const priorityPicker = document.querySelector('.priority-container');
-    const taskPriority = document.querySelector(".task-priority");
+    const taskDateForm = document.querySelector(".add-task-form .task-date");
+    const taskPriorityForm = document.querySelector(".add-task-form .task-priority");
+    const addNoteForm = document.querySelector(".add-note-form");
 
 
     //listerner related for adding lists
@@ -312,6 +301,7 @@ const todo = (function (){
         addTaskForm.addEventListener("submit", handleAddtask);
         datePicker.addEventListener("input", displaySelectedDate);
         priorityPicker.addEventListener("input", displaySelectedPriority);
+        addNoteForm.addEventListener("submit", handleAddNote);
 
         showAddListFormButton.addEventListener("click", displayAddListForm);
         cancelListFormButton.addEventListener("click", closeAddListForm);
@@ -349,14 +339,14 @@ const todo = (function (){
 
     function displaySelectedPriority(e)
     {
-        taskPriority.classList.remove("hidden");
-        taskPriority.textContent = e.target.value;
+        taskPriorityForm.classList.remove("hidden");
+        taskPriorityForm.textContent = e.target.value;
     }
 
     function displaySelectedDate(e)
     {
-        taskDate.classList.remove("hidden");
-        taskDate.textContent = e.target.value;
+        taskDateForm.classList.remove("hidden");
+        taskDateForm.textContent = e.target.value;
     } 
 
     //task/note functions
@@ -365,12 +355,33 @@ const todo = (function (){
     //handles submiting the add task form 
     function handleAddtask(e)
     {
-        let name = addTaskForm.elements["name"];
-        let date = addTaskForm.elements["date"]
-        let priority = addTaskForm.elements["priority"];  
+        e.preventDefault();
+        const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
 
+        const name = addTaskForm.elements["name"].value;
+        const date = addTaskForm.elements["date"].value;
+        const priority = addTaskForm.elements["priority"].value;  
+
+        todo.addTask({name:name,date:date,priority:priority}, listId);
+
+        taskPriorityForm.textContent = "";
+        taskDateForm.textContent = "";
+        addTaskForm.reset();
+        loadList(listId);
     }
 
+    function handleAddNote(e)
+    {
+        e.preventDefault();
+        const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
+
+        const name = addNoteForm.elements["name"].value;  
+
+        todo.addNote({name:name}, listId);
+
+        addNoteForm.reset();
+        loadList(listId);
+    }
 
     function handleDeleteTask(e)
     {
@@ -418,6 +429,9 @@ const todo = (function (){
     //loads list's tasks and notes and assign event listeners to cards
     function loadList(listId)
     {
+        //clear previous tasks and notes
+        listTaskNoteContainer.textContent = "";
+
         //get list info;
         const listInfo = todo.getListInfo(listId);
 
@@ -479,7 +493,7 @@ const todo = (function (){
                     }
                 
                 //task priotiry
-                if(taskInfo.priority != "")
+                if(taskInfo.priority != "No priority")
                     {
                         const taskPriorityContainer = taskCard.querySelector(".task-priority");
                         taskPriorityContainer.textContent = taskInfo.priority;
