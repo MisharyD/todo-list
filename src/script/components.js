@@ -81,11 +81,11 @@ class Task {
     }
 
     get completed(){
-        return this.completed
+        return this._completed
     }
 
     set completed(boolean){
-        this.completed = boolean
+        this._completed = boolean
     }
 
     get id(){

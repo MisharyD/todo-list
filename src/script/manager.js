@@ -192,7 +192,7 @@ export default class Manager {
         const task = this._allTasks[taskId]
         if(task)
             {
-                task.completed(true);
+                task.completed = true;
                 return true;
             }
         return false;
@@ -204,7 +204,7 @@ export default class Manager {
         const task = this._allTasks[taskId]
         if(task)
             {
-                task.completed(false);
+                task.completed = false;
                 return true;
             }
         return false;
@@ -235,7 +235,7 @@ export default class Manager {
         return false;
     }
 
-    
+
     //create new note and add to list, if no list is provided then add to inbox. returns note id if done successfully. otherwise false
     addNote({name = "", description = ""}, listId = null) 
     {
@@ -325,6 +325,7 @@ export default class Manager {
                 description: task.description,
                 date: task.date,
                 priority: task.priority,
+                completed:task.completed,
                 subtasks: Object.keys(task.subtasks)
             };
         }
@@ -374,8 +375,6 @@ export default class Manager {
         return [];
     }
 
-    //special lists
-
     //returns today list's id 
     get today(){
         return this._today.id;
@@ -389,6 +388,10 @@ export default class Manager {
      //returns next 7 days list's id 
      get next7(){
         return this._next7.id;
+    }
+
+    get allTasks(){
+        return Object.keys(this._allTasks);
     }
 
     saveData()

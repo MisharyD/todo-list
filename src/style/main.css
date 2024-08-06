@@ -73,7 +73,7 @@
     fill:rgb(96, 94, 94);
 }
 
-.input-date
+.task-date-input
 {
     background-color: var(--active-color);
 }
@@ -169,13 +169,31 @@
     fill:rgb(125, 2, 2);
 }
 
-.complete-button
+.completed-task
+{
+    background-color: var(--active-color);
+    opacity: 40%;
+}
+
+.complete-unchecked-button
 {
     width:22px;
     fill:var(--complete-button-color);
 }
 
-.complete-button:hover
+.complete-unchecked-button:hover
+{
+    fill: #7e7d7d;
+    cursor: pointer;
+}
+
+.complete-checked-button
+{
+    width:22px;
+    fill:var(--complete-button-color);
+}
+
+.complete-checked-button:hover
 {
     fill: #7e7d7d;
     cursor: pointer;

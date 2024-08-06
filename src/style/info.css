@@ -20,14 +20,44 @@
     gap:1rem;
 }
 
-.info-task .change-task-form .date-checkbox-container .date
+.info-task .change-task-form .date-checkbox-container .task-date
 {
     font-size: 24px;
 }
 
-.info-task .change-task-form .date-checkbox-container .complete-button
+.completed-task
 {
-    width:30px;
+    background-color: var(--active-color);
+    opacity: 40%;
+}
+
+.complete-unchecked-button
+{
+    width:22px;
+    fill:var(--complete-button-color);
+}
+
+.complete-unchecked-button:hover
+{
+    fill: #7e7d7d;
+    cursor: pointer;
+}
+
+.complete-checked-button
+{
+    width:22px;
+    fill:var(--complete-button-color);
+}
+
+.complete-checked-button:hover
+{
+    fill: #7e7d7d;
+    cursor: pointer;
+}
+
+.info-task .change-task-form .task-priority
+{
+    font-size: 22px;
 }
 
 .info-task .change-task-form .title 
@@ -48,9 +78,11 @@
 {
     font-size: 18px;
     background-color: var(--hover-color);
+    padding:8px;
     border:0px;
+    border-radius: 8px;;
 }
-.info-task .change-task-form .description:hover 
+.info-task .change-task-form .description:focus 
 {
     outline: 1px solid #4772FA;    
 }
@@ -72,6 +104,7 @@
     font-size: 14px;
     border: 0px;
     margin-bottom: 8px;
+    cursor: pointer;
 }
 
 .add-subtask-button:hover

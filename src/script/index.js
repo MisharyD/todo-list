@@ -4,247 +4,7 @@ import "../style/index.css"
 import "../style/sidebar.css"
 import "../style/main.css"
 import "../style/info.css"
-
-
-
-//currently for command line
-const Todocommand = function ()
-    {
-        let todo = new Manager()
-        todo.loadData();
-
-        function displayMainOptions() {
-            console.log("Options:");
-            console.log("1- Enter inbox list");
-            console.log("2- Enter today list");
-            console.log("3- Enter next 7 days list");
-            console.log("4- Show all lists");
-            console.log("5- Add new list");
-            console.log("6- Delete list");
-            console.log("7- Save data");
-            console.log("0- Exit");
-        
-            const choice = prompt("Enter your choice:");
-            handleMainChoice(choice);
-        }
-        
-        function handleMainChoice(choice) {
-            switch (choice) {
-                case '1':
-                    enterList(todo.inbox);
-                    break;
-                case '2':
-                    enterList(todo.today);
-                    break;
-                case '3':
-                    enterList(todo.next7);
-                    break;
-                case '4':
-                    showAllLists();
-                    break;
-                case '5':
-                    addNewList();
-                case '6':
-                    deleteList();
-                case '7':
-                    saveData();
-                    break;
-                case '0':
-                    console.log("Goodbye!");
-                    break;
-                default:
-                    console.log("Invalid choice. Try again.");
-                    displayMainOptions();
-                    break;
-            }
-        }
-        
-        function enterList(listId) {
-            console.log("List Options:");
-            console.log("1- Add new task");
-            console.log("2- Add new note");
-            console.log("3- Show all tasks and notes");
-            console.log("4- Return to all options");
-            console.log("5- Delete task");
-        
-            const choice = prompt("Enter your choice:");
-            handleListChoice(choice, listId);
-        }
-        
-        function handleListChoice(choice, listId) {
-            switch (choice) {
-                case '1':
-                    addNewTask(listId);
-                    break;
-                case '2':
-                    addNewNote(listId);
-                    break;
-                case '3':
-                    showAllTasksAndNotes(listId);
-                    break;
-                case '4':
-                    displayMainOptions();
-                    break;
-                case '5':
-                    deleteTask(listId)
-                    break;
-                default:
-                    console.log("Invalid choice. Try again.");
-                    enterList(listId);
-                    break;
-            }
-        }
-        
-        function showAllLists() {
-            const listIds = todo.getAllListIds();
-            listIds.forEach(id => {
-                const listInfo = todo.getListInfo(id);
-                console.log(`List: ${listInfo.name} (ID: ${id})`);
-            });
-        
-            const listId = prompt("Enter list ID to enter it, or '-1' to return to main menu:");
-            if (listId === '-1') {
-                displayMainOptions();
-            } else {
-                enterList(listId);
-            }
-        }
-        
-        function addNewList() {
-            const listName = prompt("Enter new list name:");
-            const newListId = todo.addList(listName);
-            console.log(`New list created with ID: ${newListId}`);
-            displayMainOptions();
-        }
-        
-        function addNewTask(listId) {
-            const name = prompt("Enter task name:");
-            const description = prompt("Enter task description:");
-            const date = prompt("Enter task date (YYYY-MM-DD):");
-            const priority = prompt("Enter task priority:");
-        
-            const taskId = todo.addTask({name, description, date, priority}, listId);
-            if (taskId !== false) {
-                console.log(`Task added with ID: ${taskId}`);
-            } else {
-                console.log("Failed to add task.");
-            }
-            enterList(listId);
-        }
-
-        function deleteList() {
-            const listIds = todo.getAllListIds();
-            listIds.forEach(id => {
-                const listInfo = todo.getListInfo(id);
-                console.log(`List: ${listInfo.name} (ID: ${id})`);
-            });
-            const listId = prompt("Enter list ID to delete:");
-            if (todo.deleteList(listId)) {
-                console.log(`List with ID: ${listId} deleted.`);
-            } else {
-                console.log("Invalid list ID. Try again.");
-            }
-            displayMainOptions();
-        }
-        
-        function addNewNote(listId) {
-            const name = prompt("Enter note name:");
-            const description = prompt("Enter note description:");
-        
-            const noteId = todo.addNote(name, description, listId);
-            if (noteId !== false) {
-                console.log(`Note added with ID: ${noteId}`);
-            } else {
-                console.log("Failed to add note.");
-            }
-            enterList(listId);
-        }
-        
-        function showAllTasksAndNotes(listId) {
-            const listInfo = todo.getListInfo(listId);
-        
-            console.log("Tasks:");
-            listInfo.tasks.forEach(taskId => {
-                const task = todo.getTaskInfo(taskId);
-                if(task)
-                    console.log(`Task: ${task.name} (ID: ${taskId})`);
-                else
-                    console.log("failed");
-            });
-        
-            console.log("Notes:");
-            listInfo.notes.forEach(noteId => {
-                const note = todo.getNoteInfo(noteId);
-                if(note)
-                    console.log(`Note: ${note.name} (ID: ${noteId})`);
-                else
-                    console.log("failed")
-            });
-        
-            const itemId = prompt("Enter task/note ID to view details, or '-1' to return to list menu:");
-            if (itemId === '-1') {
-                enterList(listId);
-            } else {
-                const task = todo.getTaskInfo(itemId);
-                if (task) {
-                    console.log(`Task: ${task.name}`);
-                    console.log(`Description: ${task.description}`);
-                    console.log(`Date: ${task.date}`);
-                    console.log(`Priority: ${task.priority}`);
-        
-                    const complete = prompt("Mark task as complete? (yes/no):");
-                    if (complete.toLowerCase() === 'yes') {
-                        todo.completeTask(itemId);
-                        console.log("Task marked as complete.");
-                    }
-                } else {
-                    const note = todo.getNoteInfo(itemId);
-                    if (note) {
-                        console.log(`Note: ${note.name}`);
-                        console.log(`Description: ${note.description}`);
-                    } else {
-                        console.log("Invalid ID. Try again.");
-                    }
-                }
-                showAllTasksAndNotes(listId);
-            }
-        }
-
-        function deleteTask(listId)
-        {
-            const listInfo = todo.getListInfo(listId);
-        
-            console.log("Tasks:");
-            listInfo.tasks.forEach(taskId => {
-                const task = todo.getTaskInfo(taskId);
-                if(task)
-                    console.log(`Task: ${task.name} (ID: ${taskId})`);
-                else
-                    console.log("failed");
-            });
-        
-            let itemId = prompt("Enter task ID to delete or '-1' to return to list menu:")
-            if (itemId === '-1') {
-                enterList(listId);
-            }
-            else
-            {
-                const deleted = todo.deleteTask(itemId);
-                if(deleted)
-                    console.log("task deleted successfully")
-                else
-                    console.log("failed")
-                enterList(listId);
-            }
-
-
-
-        }
-
-        displayMainOptions();
-        
-    };
-
+import { se } from "date-fns/locale"
 
 const todo = (function (){
 
@@ -254,16 +14,18 @@ const todo = (function (){
     const allListsContainer = document.querySelector(".all-lists-container");
     const listContainer = document.querySelector(".list-container");
     const listTaskNoteContainer = document.querySelector(".notes-tasks-container")
+    const completedTasksContainer = document.querySelector(".list-container.completed")
     const infoTaskContainer = document.querySelector(".info-task");
     const infoNoteontainer = document.querySelector(".info-note");
     
     //listeners
 
     //listeners related to displaying things
-    const dateToggleButton = document.querySelector(".date-toggle");
-    const priorityToggleButton = document.querySelector('.priority-flag-button');
-    const showAddListFormButton = document.querySelector(".add-list-button")
-    const cancelListFormButton = document.querySelector(".cancel-list-form")
+    const dateToggleButton = document.querySelectorAll(".date-toggle");
+    const priorityToggleButton = document.querySelectorAll('.priority-flag-button');
+    const showAddListFormButton = document.querySelector(".add-list-button");
+    const cancelListFormButton = document.querySelector(".cancel-list-form");
+    const completedButton = document.querySelector(".completed");
 
     //listeners for the main lists
     const inboxButton = document.querySelector(".inbox");
@@ -272,10 +34,8 @@ const todo = (function (){
 
     //listerner related for adding tasks and notes
     const addTaskForm = document.querySelector(".add-task-form");
-    const datePicker = document.querySelector('.input-date');
-    const priorityPicker = document.querySelector('.priority-container');
-    const taskDateForm = document.querySelector(".add-task-form .task-date");
-    const taskPriorityForm = document.querySelector(".add-task-form .task-priority");
+    const taskDateInput = document.querySelectorAll(".task-date-input");
+    const taskPriorityInput = document.querySelectorAll(".task-priority-input");
     const addNoteForm = document.querySelector(".add-note-form");
 
 
@@ -290,8 +50,9 @@ const todo = (function (){
     function init()
     {
         //listeners related to displaying things
-        dateToggleButton.addEventListener('click', toggleDateInput);
-        priorityToggleButton.addEventListener("click", togglePriorityInput)
+        dateToggleButton.forEach(btn => btn.addEventListener('click', toggleDateInput));
+        priorityToggleButton.forEach(btn => btn.addEventListener("click", togglePriorityInput));
+        completedButton.addEventListener("click", loadCompleted)
         
         //listeners for the main lists
         inboxButton.addEventListener("click", handleListSelect);
@@ -299,8 +60,6 @@ const todo = (function (){
         next7Button.addEventListener("click", handleListSelect);
 
         addTaskForm.addEventListener("submit", handleAddtask);
-        datePicker.addEventListener("input", displaySelectedDate);
-        priorityPicker.addEventListener("input", displaySelectedPriority);
         addNoteForm.addEventListener("submit", handleAddNote);
 
         showAddListFormButton.addEventListener("click", displayAddListForm);
@@ -328,31 +87,20 @@ const todo = (function (){
         addListForm.close();
     }
 
-    function toggleDateInput()
+    function toggleDateInput(e)
     {
-        datePicker.classList.toggle('hidden');
+        const taskForm = e.target.closest(".task-form");
+        taskForm.querySelector(".task-date-input").classList.toggle('hidden')
     }
 
-    function togglePriorityInput()
+    function togglePriorityInput(e)
     {
-        priorityPicker.classList.toggle('hidden')
+        const taskForm = e.target.closest(".task-form");
+        taskForm.querySelector(".priority-container").classList.toggle('hidden')   
     }
-
-    function displaySelectedPriority(e)
-    {
-        taskPriorityForm.classList.remove("hidden");
-        taskPriorityForm.textContent = e.target.value;
-    }
-
-    function displaySelectedDate(e)
-    {
-        taskDateForm.classList.remove("hidden");
-        taskDateForm.textContent = e.target.value;
-    } 
 
     //task/note functions
 
-    //to remove: should call loadList
     //handles submiting the add task form 
     function handleAddtask(e)
     {
@@ -367,8 +115,6 @@ const todo = (function (){
 
         todo.addTask({name:name,date:date,priority:priority}, listId);
 
-        taskPriorityForm.textContent = "";
-        taskDateForm.textContent = "";
         addTaskForm.reset();
         loadList(listId);
     }
@@ -425,14 +171,31 @@ const todo = (function (){
                 loadList(listId)
             }
     }
-     
-    function loadTaskInfo(taskId){}
-    
-    function loadNoteInfo(noteId){}
     
     function handleTaskSelect(e)
     {
-        console.log("task selected")
+        infoTaskContainer.classList.remove("hidden");
+
+        //get task information
+        const taskId = e.target.closest(".task-card").getAttribute("id").slice(1);
+        const taskInfo = todo.getTaskInfo(taskId);
+        
+        //assign id to card in form
+        infoTaskContainer.querySelector(".change-task-form").setAttribute("id", "i" + taskId);
+
+        //assign task info to form values
+        infoTaskContainer.querySelector("input[name='name']").value = taskInfo.name; 
+
+        if(taskInfo.description == "")
+            infoTaskContainer.querySelector("textarea").value = "Description..."; 
+        else
+            infoTaskContainer.querySelector("textarea").value = taskInfo.description; 
+
+        infoTaskContainer.querySelector(".task-date-input").value = taskInfo.date; 
+
+        const taskPriorityValue = taskInfo.priority;
+        const selector = `.task-priority-input[value="${taskPriorityValue}"]`;
+        infoTaskContainer.querySelector(selector).checked = true;
     }
 
     function handleNoteSelect(e)
@@ -441,8 +204,37 @@ const todo = (function (){
     }
     
     function handleCompleteTask(e){
+        //prevent card event
         e.stopPropagation()
-        console.log("completed")
+        
+        //get list id
+        const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
+
+        //complete task
+        const taskCard = e.target.closest(".task-card")
+        const taskId = taskCard.getAttribute("id").slice(1);
+        todo.completeTask(taskId);
+
+        loadList(listId)
+    }
+
+    function handleUncompleteTask(e)
+    {
+        //prevent card event
+        e.stopPropagation()
+        
+        //get list id
+        const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
+
+        //complete task
+        const taskCard = e.target.closest(".task-card")
+        const taskId = taskCard.getAttribute("id").slice(1);
+        todo.uncompleteTask(taskId);
+
+        if(listId == 9999)//if the uncomplete came from the completed list, load the completed list again 
+            loadCompleted()
+        else
+            loadList(listId)
     }
     
     function handleChangeTaskInfo(e){}
@@ -467,6 +259,10 @@ const todo = (function (){
     {
         //clear previous tasks and notes
         listTaskNoteContainer.textContent = "";
+
+        //reverse necessary elements if user came from completed list
+        listContainer.querySelector(".toggle-tasks-notes-container").classList.remove("hidden");
+        listContainer.querySelector(".add-task-form").classList.remove("hidden");
 
         //get list info;
         const listInfo = todo.getListInfo(listId);
@@ -514,6 +310,7 @@ const todo = (function (){
                 } 
 
         const taskIds = listInfo.tasks;
+        const completedTasks = [];//store them to later append them to the container
         for(let i =0; i<taskIds.length; i++)
             {
                 //get a task card
@@ -522,13 +319,15 @@ const todo = (function (){
 
                 //assign task information and eventlisteners to elemenets
 
-                let taskInfo = todo.getTaskInfo(taskIds[i]);
+                const taskInfo = todo.getTaskInfo(taskIds[i]);
+
                 //card
                 taskCard.setAttribute("id", "i" + taskIds[i]);
                 taskCard.addEventListener("click", handleTaskSelect)
 
                 //complete button listener and title
-                taskCard.querySelector(".complete-button").addEventListener("click", handleCompleteTask);
+                taskCard.querySelector(".complete-unchecked-button").addEventListener("click", handleCompleteTask);
+                taskCard.querySelector(".complete-checked-button").addEventListener("click", handleUncompleteTask);
                 taskCard.querySelector(".title").textContent = taskInfo.name;
 
                 //task date
@@ -548,9 +347,21 @@ const todo = (function (){
                     }
 
                 taskCard.querySelector(".delete-button").addEventListener("click", handleDeleteTask);
-                
-                listTaskNoteContainer.append(taskCard);
+                if(taskInfo.completed)
+                {
+                    //change visuals
+                    taskCard.classList.add("completed-task");
+                    taskCard.querySelector(".complete-unchecked-button").classList.add("hidden");
+                    taskCard.querySelector(".complete-checked-button").classList.remove("hidden");
+                    taskCard.querySelector(".delete-button").classList.add("hidden");
+                    
+                    completedTasks.push(taskCard)
+                }
+                else
+                    listTaskNoteContainer.append(taskCard);
             }
+            for(let i =0;i <completedTasks.length;i++)
+                listTaskNoteContainer.append(completedTasks[i]);
     }
 
     function loadAllLists()
@@ -611,12 +422,79 @@ const todo = (function (){
             }
     }
 
+    function loadCompleted()
+    {
+        
+        //remove previous cards
+        listTaskNoteContainer.textContent = "";
+
+        //remove elements not related to completed list
+        listContainer.querySelector(".list-title").textContent = "Completed";
+        listContainer.querySelector(".toggle-tasks-notes-container").classList.add("hidden");
+        listContainer.querySelector(".add-task-form").classList.add("hidden");
+
+        //remove previous list's background 
+        const prevListId = listContainer.getAttribute("id");
+        document.querySelector("#"+prevListId).classList.remove("current-list");
+
+        //add background to new list
+        document.querySelector("#i9999").classList.add("current-list");
+        listContainer.setAttribute("id", "i9999")
+        
+        const allTasksIds = todo.allTasks;
+
+        for(let i =0;i<allTasksIds.length; i++)
+            {
+                if(todo.getTaskInfo(allTasksIds[i]).completed)
+                    {
+                        //get a task card
+                        const taskCard = document.querySelector(".task-card.structure").cloneNode(true);
+                        taskCard.classList.remove("structure", "hidden");
+
+                        //assign task information and eventlisteners to elemenets
+
+                        const taskInfo = todo.getTaskInfo(allTasksIds[i]);
+                        //card
+                        taskCard.setAttribute("id", "i" + allTasksIds[i]);
+                        taskCard.addEventListener("click", handleTaskSelect)
+
+                        //complete button listener and title
+                        taskCard.querySelector(".complete-unchecked-button").addEventListener("click", handleCompleteTask);
+                        taskCard.querySelector(".complete-checked-button").addEventListener("click", handleUncompleteTask);
+                        taskCard.querySelector(".title").textContent = taskInfo.name;
+
+                        //task date
+                        if(taskInfo.date != "")
+                            {
+                                const taskDateContainer = taskCard.querySelector(".task-date")
+                                taskDateContainer.textContent = taskInfo.date
+                                taskDateContainer.classList.remove("hidden");
+                            }
+                        
+                        //task priotiry
+                        if(taskInfo.priority != "No priority")
+                            {
+                                const taskPriorityContainer = taskCard.querySelector(".task-priority");
+                                taskPriorityContainer.textContent = taskInfo.priority;
+                                taskPriorityContainer.classList.remove("hidden");
+                            }
+
+                        taskCard.querySelector(".delete-button").addEventListener("click", handleDeleteTask);
+
+                        //change visuals
+                        taskCard.classList.add("completed-task");
+                        taskCard.querySelector(".complete-unchecked-button").classList.add("hidden");
+                        taskCard.querySelector(".complete-checked-button").classList.remove("hidden");
+                        taskCard.querySelector(".delete-button").classList.add("hidden");
+
+                        listTaskNoteContainer.append(taskCard);
+                    }
+            }
+    }
 
     init();
 })();
 
-
-//toggle add list form
 
 //toggle task and note forms 
 const toggleTaskForm = document.querySelector(".toggle-add-task");
