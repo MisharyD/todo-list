@@ -4,7 +4,7 @@
     background-color: var(--side-bar-color);
     display:flex;
     flex-direction: column;
-    gap:2rem;
+    gap:1rem;
     padding:16px;
     min-width: 250px;
     border-right: 1px solid var(--border-color);
@@ -26,6 +26,7 @@
 {
     width: var(--main-icon-width);
     fill:white;
+    margin-bottom: 8px;
 }
 
 .main-lists
@@ -36,7 +37,7 @@
     font-size: 20px;
 }
 
-.all-list
+.title-addList-container
 {
     border-top: 1px solid var(--border-color);
 }
@@ -69,7 +70,8 @@
     justify-content: space-between;
     --font-size:24px;
     padding:8px var(--left-padding);
-    margin-bottom: 16px;
+    margin-bottom: 4px;
+    border-top: 1px solid var(--border-color);
 }
 
 .list-icon
@@ -151,6 +153,12 @@
     align-items: center;
     border-radius: 8px;
 }
+
+.list-card:last-child
+{
+   margin-bottom: 8px;
+}
+
 
 .title-icon-container
 {

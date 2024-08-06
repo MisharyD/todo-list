@@ -1,4 +1,6 @@
 import { Task, List, Note } from  "./components"
+import { isToday, isWithinInterval, addDays } from 'date-fns';
+
 
 //acts as a save file and as task manager, contains functions for adding, deleting tasks and lists. 
 //changing info about a task or a list. contains an array for all tasks, lists and notes. 
@@ -29,8 +31,12 @@ export default class Manager {
         //add task to list
 
         //default
-        if(listId == null)
-            this._inbox.addTask(task)
+        if(listId == 1 || listId == 2)//if the list is today or next7 then added it to inbox instead
+            {
+                this._inbox.addTask(task)
+                this.#addToTodayAndNext7(task);
+                return true;
+            }
         //other list
         else
         {
@@ -38,11 +44,29 @@ export default class Manager {
             if (list)
             {
                 list.addTask(task);
+                this.#addToTodayAndNext7(task);
                 return task.id;
             }
             else
                 return false;
         }
+
+        
+    }
+
+    //add task to day to today list or next 7 days list if the date match for said lists.
+    #addToTodayAndNext7(task)
+    {
+        const date = task.date;
+
+        const today = new Date();
+        const sevenDaysFromNow = addDays(today, 7);
+        const isInNext7Days = isWithinInterval(date, { start: today, end: sevenDaysFromNow });
+
+        if(isToday(date))
+            this._today.addTask(task);
+        if(isInNext7Days)
+            this._next7.addTask(task);
     }
 
     //add subtask in another task. mainTask is the parent task. returns task id if operation done successfully. otherwise false
@@ -239,7 +263,8 @@ export default class Manager {
     }
 
     
-    //delete note given noteId and the list id that contains it. returns true if done successfully. otherwise false
+    //delete note given noteId and the list id that contains it. returns true if done successfully. otherwise false. 
+    //list id is askes to save time because a note can only exist in 1 list.
     deleteNote(noteId, listId) 
     {
         const note = this._allNotes[noteId];
@@ -254,7 +279,7 @@ export default class Manager {
             const list = this._allLists[listId];
             if(list)
             {
-                list.removeNote(note);
+                list.deleteNote(note);
                 return true;
             }
             else

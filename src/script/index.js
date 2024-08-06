@@ -251,7 +251,7 @@ const todo = (function (){
     const todo = new Manager();
 
     //main containers
-    const allListContainer = document.querySelector(".all-lists");
+    const allListsContainer = document.querySelector(".all-lists-container");
     const listContainer = document.querySelector(".list-container");
     const listTaskNoteContainer = document.querySelector(".notes-tasks-container")
     const infoTaskContainer = document.querySelector(".info-task");
@@ -312,6 +312,7 @@ const todo = (function (){
 
         //load inbox
         loadList(0);
+        loadAllLists();
     }
 
     //functions for displaying and closing things
@@ -355,7 +356,9 @@ const todo = (function (){
     //handles submiting the add task form 
     function handleAddtask(e)
     {
+        //prevent submit
         e.preventDefault();
+
         const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
 
         const name = addTaskForm.elements["name"].value;
@@ -372,6 +375,7 @@ const todo = (function (){
 
     function handleAddNote(e)
     {
+        //prevent submit
         e.preventDefault();
         const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
 
@@ -385,14 +389,41 @@ const todo = (function (){
 
     function handleDeleteTask(e)
     {
+        //prevent card event 
         e.stopPropagation()
-        console.log("task deleted")
+
+        const choice = confirm("Are you sure ?");
+        if(choice)
+            {
+                //get list id
+                const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
+        
+                //delete task
+                const taskId = e.target.closest(".task-card").getAttribute("id").slice(1);
+                todo.deleteTask(taskId);
+        
+                loadList(listId)
+            }
     }
 
     function handleDeleteNote(e)
     {
+        //prevent card event 
         e.stopPropagation()
-        console.log("note deleted")
+
+        const choice = confirm("Are you sure ?");
+        if(choice)
+            {
+                //get list id
+                const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
+                console.log(listId);
+        
+                //delete note
+                const noteId = e.target.closest(".note-card").getAttribute("id").slice(1);
+                todo.deleteNote(noteId, listId);
+        
+                loadList(listId)
+            }
     }
      
     function loadTaskInfo(taskId){}
@@ -419,11 +450,16 @@ const todo = (function (){
     function handleChangeNoteInfo(e){}
     
     //list functions
-
     function handleAddList(e)
     {
-        console.log("test")
+        const dialog  = e.target.closest(".add-list-form");
+        const name = dialog.querySelector("input[name='name']").value;
+        
+        todo.addList(name);
+
         closeAddListForm();
+        loadAllLists();
+
     }
 
     //loads list's tasks and notes and assign event listeners to cards
@@ -441,8 +477,19 @@ const todo = (function (){
         //assign list title
         listContainer.querySelector(".list-title").textContent = listInfo.name;
 
-        //load tasks and notes
+        //change the placeholder of forms
+        if(listId == 0 || listId == 1 || listId == 2)
+            {
+                addTaskForm.querySelector("input[name='name']").placeholder = "Add task to Inbox, Press Enter to save."
+                addNoteForm.querySelector("input[name='name']").placeholder = "Add note to Inbox, Press Enter to save."
+            }
+        else 
+        {
+            addTaskForm.querySelector("input[name='name']").placeholder = "Add task to " + listInfo.name + ", Press Enter to save.";
+            addNoteForm.querySelector("input[name='name']").placeholder = "Add note to Inbox, Press Enter to save."
+        }
 
+        //load tasks and notes
         const noteIds = listInfo.notes;
             for(let i =0; i<noteIds.length; i++)
                 {
@@ -506,16 +553,63 @@ const todo = (function (){
             }
     }
 
-    //to remove: should use allListContainer
-    function loadAllLists(){}
-
-    //get assigned to all lists
-    function handleListSelect(e)
+    function loadAllLists()
     {
+        allListsContainer.textContent = "";
 
+        const allListsIds = todo.getAllListIds();
+        for(let i =3; i<allListsIds.length; i++)//hard coded the assumption that inbox, today, next7 should have the ids 0, 1, 2 respectively/
+            {
+                const listInfo = todo.getListInfo(allListsIds[i]);
+
+                //get list card
+                const listCard = document.querySelector(".list-card.structure").cloneNode(true);
+                listCard.classList.remove("structure", "hidden");
+                listCard.addEventListener("click", handleListSelect)
+
+                //assign information
+                listCard.setAttribute("id", "i" + allListsIds[i]);
+                listCard.querySelector(".title").textContent = listInfo.name;
+                listCard.querySelector(".delete-button").addEventListener("click", handleDeleteList);
+
+                allListsContainer.append(listCard);
+            } 
     }
 
-    function handleDeleteList(e){}
+    function handleListSelect(e)
+    {
+        const listId = e.target.closest(".list").getAttribute("id").slice(1);
+
+        //remove previous list's background 
+        const prevListId = listContainer.getAttribute("id");
+        document.querySelector("#"+prevListId).classList.remove("current-list");
+
+        //add background to new list
+        document.querySelector("#i" + listId).classList.add("current-list");
+
+        loadList(listId);
+    }
+
+    function handleDeleteList(e)
+    {
+        //prevent card event 
+        e.stopPropagation()
+
+        const choice = confirm("Are you sure ?");
+        if(choice)
+            {
+                //get list id
+                const listId = e.target.closest(".list-card").getAttribute("id").slice(1);
+                
+                //delete list
+                todo.deleteList(listId);
+
+                if(listId == listContainer.getAttribute("id").slice(1))
+                    loadList(0);
+
+                loadAllLists();
+            }
+    }
 
 
     init();
