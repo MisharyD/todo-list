@@ -203,7 +203,6 @@ const todo = (function (){
             {
                 //get list id
                 const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
-                console.log(listId);
         
                 //delete note
                 const noteId = e.target.closest(".note-card").getAttribute("id").slice(1);
@@ -300,7 +299,6 @@ const todo = (function (){
         //check if the request came from the info section. if it is, get the id from it, since it does have a closest task-card
         if(e.target == infoSectionUncheckedButton)
         {
-            console.log("pressed");
             taskId = changeTaskForm.getAttribute("id").slice(1);
             todo.completeTask(taskId);
 
@@ -333,7 +331,6 @@ const todo = (function (){
         //complete task
 
         let taskId
-        console.log(e.target); 
         //check if the request came from the info section. if it is, get the id from it, since it does have a closest task-card
         if(e.target == infoSectionCheckedButton)
         {
@@ -375,7 +372,8 @@ const todo = (function (){
         const name = changeForm.querySelector("input[name='name']").value;
         const description = changeForm.querySelector("textarea[name='description']").value;
         const date = changeForm.querySelector("input[name='date']").value;
-        const priority = changeForm.querySelector("input[name='priority']").value;
+        const priority = changeForm.elements["priority"].value;//since it is a group, "input[name =''priority]" doesnt work.
+        console.log(priority)
 
         //update info
         todo.changeTaskInfo(taskId, name, description, date, priority);
