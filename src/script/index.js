@@ -37,12 +37,12 @@ const todo = (function (){
     //listerner related for adding tasks and notes
     const addTaskForm = document.querySelector(".add-task-form");
     const addNoteForm = document.querySelector(".add-note-form");
-    const taskDateInput = document.querySelectorAll(".task-date-input");
-    const taskPriorityInput = document.querySelectorAll(".task-priority-input");
     const changeTaskForm = document.querySelector(".change-task-form");
     const changeNoteForm = document.querySelector(".change-note-form");
     const infoSectionUncheckedButton = document.querySelector(".change-task-form .complete-unchecked-button");
     const infoSectionCheckedButton = document.querySelector(".change-task-form .complete-checked-button");
+    const submitTaskChangeButton = document.querySelector(".submit-change-task-button");
+    const submitNoteChangeButton = document.querySelector(".submit-change-note-button");
     
 
     //listerner related for adding lists
@@ -71,11 +71,12 @@ const todo = (function (){
         cancelListFormButton.addEventListener("click", closeAddListForm);
         submitListFormButton.addEventListener("click", handleAddList)
 
-        //changeTaskInfoButton.addEventListener("submit", handleChangeTaskInfo)
         changeTaskForm.addEventListener("submit", handleChangeTaskInfo);
         changeNoteForm.addEventListener("submit", handleChangeNoteInfo);
         infoSectionUncheckedButton.addEventListener("click", handleCompleteTask);
         infoSectionCheckedButton.addEventListener("click", handleUncompleteTask);
+        changeTaskForm.addEventListener("input", displayChangeTaskButton);
+        changeNoteForm.addEventListener("input", displayChangeNoteButton);
 
         //load inbox
         loadList(0);
@@ -123,6 +124,16 @@ const todo = (function (){
 
         addTaskForm.classList.add('hidden');
         addNoteForm.classList.remove('hidden');
+    }
+
+    function displayChangeTaskButton()
+    {
+        submitTaskChangeButton.classList.remove("hidden");
+    }
+
+    function displayChangeNoteButton()
+    {  
+        submitNoteChangeButton.classList.remove("hidden");
     }
 
     //task/note functions
@@ -173,6 +184,10 @@ const todo = (function (){
                 //delete task
                 const taskId = e.target.closest(".task-card").getAttribute("id").slice(1);
                 todo.deleteTask(taskId);
+
+                //close info section if it is opened for the deleted task
+                if("i"+taskId == infoTaskContainer.querySelector(".change-task-form").getAttribute("id"));//i is added to task id so that even without slicing the id it works, if it sliced without the attribute having a value it generates an error
+                    infoTaskContainer.classList.add("hidden");
         
                 loadList(listId)
             }
@@ -193,6 +208,10 @@ const todo = (function (){
                 //delete note
                 const noteId = e.target.closest(".note-card").getAttribute("id").slice(1);
                 todo.deleteNote(noteId, listId);
+
+                //close info section if it is opened for the deleted task
+                if("i"+noteId == infoNoteContainer.querySelector(".change-note-form").getAttribute("id"));//i is added to task id so that even without slicing the id it works, if it sliced without the attribute having a value it generates an error
+                    infoNoteContainer.classList.add("hidden");
         
                 loadList(listId)
             }
@@ -241,15 +260,19 @@ const todo = (function (){
         const selector = `.task-priority-input[value="${taskPriorityValue}"]`;
         infoTaskContainer.querySelector(selector).checked = true;
     }
-
-
+ 
     function handleNoteSelect(e)
     {
         infoTaskContainer.classList.add("hidden");
         infoNoteContainer.classList.remove("hidden");
-
+        
         //get note information
         const noteId = e.target.closest(".note-card").getAttribute("id").slice(1);
+        loadNoteInfo(noteId);
+    }
+
+    function loadNoteInfo(noteId)
+    {
         const noteInfo = todo.getNoteInfo(noteId);
         
         //assign id to card in form
@@ -291,7 +314,7 @@ const todo = (function (){
             todo.completeTask(taskId);
 
             //check if the info section for the same task that is requesting is complete. if it is, load the section again to update the checkbox in it. 
-            if("i" + taskId == changeTaskForm.getAttribute("id"))
+            if("i" + taskId == changeTaskForm.getAttribute("id"))//i is added to task id so that even without slicing the id it works, if it sliced without the attribute having a value it generates an error
                 loadTaskInfo(taskId);
         }
 
@@ -343,10 +366,48 @@ const todo = (function (){
         //prevent submit
         e.preventDefault();
 
-        console.log("changed");
+        //necassery identification
+        const listId = listContainer.getAttribute("id").slice(1);
+        const changeForm = e.target
+        const taskId = changeForm.getAttribute("id").slice(1);
+
+        //get info
+        const name = changeForm.querySelector("input[name='name']").value;
+        const description = changeForm.querySelector("textarea[name='description']").value;
+        const date = changeForm.querySelector("input[name='date']").value;
+        const priority = changeForm.querySelector("input[name='priority']").value;
+
+        //update info
+        todo.changeTaskInfo(taskId, name, description, date, priority);
+        loadTaskInfo(taskId);
+        loadList(listId);
+
+        //remove submit button
+        submitTaskChangeButton.classList.add("hidden");
     }
     
-    function handleChangeNoteInfo(e){}
+    function handleChangeNoteInfo(e)
+    {
+        //prevent submit
+        e.preventDefault();
+
+        //necassery identification
+        const listId = listContainer.getAttribute("id").slice(1);
+        const changeForm = e.target
+        const noteId = changeForm.getAttribute("id").slice(1);
+
+        //get info
+        const name = changeForm.querySelector("input[name='name']").value;
+        const description = changeForm.querySelector("textarea[name='description']").value;
+
+        //update info
+        todo.changeNoteInfo(noteId, name, description);
+        loadNoteInfo(noteId);
+        loadList(listId);
+
+        //remove submit button
+        submitNoteChangeButton.classList.add("hidden");
+    }
     
     //list functions
     function handleAddList(e)
@@ -367,13 +428,9 @@ const todo = (function (){
         //clear previous tasks and notes
         listTaskNoteContainer.textContent = "";
 
-        //reverse necessary elements if user came from completed list
-        if(listId == 9999)
-            {
-                listContainer.querySelector(".toggle-tasks-notes-container").classList.remove("hidden");
-                listContainer.querySelector(".add-task-form").classList.remove("hidden");
-            }
-
+        //necessary if coming from complete list
+        listContainer.querySelector(".toggle-tasks-notes-container").classList.remove("hidden");
+            
         //get list info;
         const listInfo = todo.getListInfo(listId);
 
@@ -385,10 +442,10 @@ const todo = (function (){
 
         //change the placeholder of forms
         if(listId == 0 || listId == 1 || listId == 2)
-            {
-                addTaskForm.querySelector("input[name='name']").placeholder = "Add task to Inbox, Press Enter to save."
-                addNoteForm.querySelector("input[name='name']").placeholder = "Add note to Inbox, Press Enter to save."
-            }
+        {
+            addTaskForm.querySelector("input[name='name']").placeholder = "Add task to Inbox, Press Enter to save.";
+            addNoteForm.querySelector("input[name='name']").placeholder = "Add note to Inbox, Press Enter to save.";
+        }
         else 
         {
             addTaskForm.querySelector("input[name='name']").placeholder = "Add task to " + listInfo.name + ", Press Enter to save.";

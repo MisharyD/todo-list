@@ -106,6 +106,21 @@ export default class Manager {
             return false;
     }
 
+    //change existing task info given all information about a task. returns true if operation done successfully. otherwise false
+    changeNoteInfo(noteId, name, description) 
+    {
+        const note = this._allNotes[noteId];
+        if (note) 
+        {
+            note.name = name;
+            note.description = description;
+            
+            return true;
+        }
+        else
+            return false;
+    }
+
     
     //add new list, returns list id
     addList(name = "") 
