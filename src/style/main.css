@@ -141,7 +141,7 @@
     cursor:pointer;
 }
 
-.hide-subtasks-button
+.close-subtasks-button
 {
     width:15px;
     fill:var(--complete-button-color);
@@ -231,6 +231,11 @@
 {
     flex: 1 1 auto;
     font-size: 20px;
+}
+
+.subtasks-container
+{
+    margin-left: 30px;
 }
 
 .hidden

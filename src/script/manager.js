@@ -77,6 +77,7 @@ export default class Manager {
         {
             //add subtask to allTasks
             const subtask = new Task(name, description, date, priority,completed, parentTaskId, id);
+            console.log(subtask.parentTaskId);
             this._allTasks[subtask.id] = subtask;
     
             //add subtask to the subtask array in the maintask

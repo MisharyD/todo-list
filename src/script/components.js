@@ -73,11 +73,11 @@ class Task {
     }
 
     get parentTaskId(){
-        return this._parentTask;
+        return this._parentTaskId;
     }
 
     set parentTaskId(id){
-        this._parentTask = id;
+        this._parentTaskId = id;
     }
 
     get completed(){
@@ -96,7 +96,7 @@ class Task {
         this._subtasks[task.id] = task;
     }
 
-    removeSubTask = (task) => {
+    removeSubtask = (task) => {
         delete this._subtasks[task.id]
     }
 

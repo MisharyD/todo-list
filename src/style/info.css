@@ -115,22 +115,28 @@
     cursor: pointer;
 }
 
+.add-subtask-button
+{
+    align-self: flex-start;
+}
+
 .add-subtask-button:hover
 {
     cursor: pointer;
 }
 
-.add-subtask .add-task-form .input-text
+.add-subtask-form .input-text
 {
-    background-color:var(--color2);
-    flex:1 1 auto;
+    background-color:var(--hover-color);
+    width: 45%;
+    flex:0 1 auto;
     font-size: 14px;
     padding:8px 12px;
     border-radius: 8px;
     border:0px;
 }
 
-.add-subtask .add-task-form .input-text:focus
+.add-subtask-form .input-text:focus
 {
     outline:1px solid #4772FA;
 }
