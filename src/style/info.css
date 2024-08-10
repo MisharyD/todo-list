@@ -184,6 +184,11 @@
     border-radius: 8px;
 }
 
+.info .subtasks-container
+{
+    margin:0px;
+}
+
 .hidden
 {
     display: none;

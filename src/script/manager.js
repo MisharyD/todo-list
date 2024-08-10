@@ -77,7 +77,6 @@ export default class Manager {
         {
             //add subtask to allTasks
             const subtask = new Task(name, description, date, priority,completed, parentTaskId, id);
-            console.log(subtask.parentTaskId);
             this._allTasks[subtask.id] = subtask;
     
             //add subtask to the subtask array in the maintask
@@ -337,15 +336,18 @@ export default class Manager {
         //if task exists
         if (task) {
             return {
+                id:task.id,
                 name: task.name,
                 description: task.description,
                 date: task.date,
                 priority: task.priority,
                 completed:task.completed,
+                parentTaskId:task.parentTaskId,
                 subtasks: Object.keys(task.subtasks)
             };
         }
-        return false;
+        else
+            return false;
     }
 
     

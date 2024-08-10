@@ -9,13 +9,11 @@ import { se } from "date-fns/locale"
 const todo = (function (){
 
     const todo = new Manager();
-    todo.addTask({name:"task1",priority:"No priority"},0);
 
     //main containers
     const allListsContainer = document.querySelector(".all-lists-container");
     const listContainer = document.querySelector(".list-container");
     const listTaskNoteContainer = document.querySelector(".notes-tasks-container")
-    const completedTasksContainer = document.querySelector(".list-container.completed")
     const infoTaskContainer = document.querySelector(".info-task");
     const infoNoteContainer = document.querySelector(".info-note");
     
@@ -86,9 +84,7 @@ const todo = (function (){
         infoSectionCheckedButton.addEventListener("click", handleUncompleteTask);
         submitListFormButton.addEventListener("click", handleAddList)
 
-        
-
-        //load inbox
+        //load inbox and all lists in the side bar
         loadList(0);
         loadAllLists();
     }
@@ -209,12 +205,24 @@ const todo = (function (){
     function handleAddSubtask(e)
     {
         e.preventDefault();
-        const addForm = e.target
+        //get parent task from the change task form in the info section
+        const mainTaskId = infoTaskContainer.querySelector(".change-task-form").getAttribute("id").slice(1);
+        
+        //get information of subtask
+        const subtaskName = addSubtaskForm.elements['name'].value;
+        const subtaskDate = addSubtaskForm.elements['date'].value;
+        const subtaskPriority = addSubtaskForm.elements['priority'].value;
+
+        //add subtask to main task
+        todo.addSubtask(mainTaskId,{name:subtaskName, date:subtaskDate, priority:subtaskPriority, parentTaskId:mainTaskId});
 
         //update visuals
-        addForm.reset();
+        addSubtaskForm.reset();
         addSubtaskForm.classList.add("hidden");
         addSubtaskButton.classList.remove("hidden");
+
+        loadList(listContainer.getAttribute("id").slice(1));
+        loadTaskInfo(mainTaskId);
     }
 
     function handleAddNote(e)
@@ -240,15 +248,24 @@ const todo = (function (){
         if(choice)
             {
                 //get list id
-                const listId = e.target.closest(".list-container").getAttribute("id").slice(1);
+                const listId = listContainer.getAttribute("id").slice(1);
         
-                //delete task
+                //get task info
                 const taskId = e.target.closest(".task-card").getAttribute("id").slice(1);
+                const taskInfo = todo.getTaskInfo(taskId);//save it before deleting task 
+
+                //delete task
                 todo.deleteTask(taskId);
 
                 //close info section if it is opened for the deleted task
-                if("i"+taskId == infoTaskContainer.querySelector(".change-task-form").getAttribute("id"));//i is added to task id so that even without slicing the id it works, if it sliced without the attribute having a value it generates an error
+                if("i"+taskId == infoTaskContainer.querySelector(".change-task-form").getAttribute("id"))//i is added to task id so that even without slicing the id it works, if it sliced without the attribute having a value it generates an error
                     infoTaskContainer.classList.add("hidden");
+
+                //if requetst is from a subtask in the info section, then load info section again
+                if(changeTaskForm.getAttribute("id") == "i" + taskInfo.parentTaskId)
+                {
+                    loadTaskInfo(changeTaskForm.getAttribute("id").slice(1));
+                }
         
                 loadList(listId)
             }
@@ -288,6 +305,102 @@ const todo = (function (){
         loadTaskInfo(taskId);
     }
 
+    //returns a subtask card loaded with the subtask info and necceary event listeners, a
+    function getSubtaskCard(subtaskId)
+    {
+        const subtaskCard = document.querySelector(".task-card.subtask.structure").cloneNode(true);
+        subtaskCard.classList.remove("structure", "hidden");
+
+        //assign task information and eventlisteners to elemenets
+        const subtaskInfo = todo.getTaskInfo(subtaskId);
+
+        //card
+        subtaskCard.setAttribute("id", "i" + subtaskId);
+        subtaskCard.addEventListener("click", handleTaskSelect)
+
+        //complete button listener and title
+        subtaskCard.querySelector(".complete-unchecked-button").addEventListener("click", handleCompleteTask);
+        subtaskCard.querySelector(".complete-checked-button").addEventListener("click", handleUncompleteTask);
+        subtaskCard.querySelector(".title").textContent = subtaskInfo.name;
+
+        //task date
+        if(subtaskInfo.date != "")
+            {
+                const taskDateContainer = subtaskCard.querySelector(".task-date")
+                taskDateContainer.textContent = subtaskCard.date
+                taskDateContainer.classList.remove("hidden");
+            }
+        
+        //task priotiry
+        if(subtaskInfo.priority != "No priority")
+            {
+                const taskPriorityContainer = subtaskCard.querySelector(".task-priority");
+                taskPriorityContainer.textContent = subtaskInfo.priority;
+                taskPriorityContainer.classList.remove("hidden");
+            }
+
+        //task completed status
+        subtaskCard.querySelector(".delete-button").addEventListener("click", handleDeleteTask);
+        if(subtaskInfo.completed)
+        {
+            //change visuals
+            subtaskCard.classList.add("completed-task");
+            subtaskCard.querySelector(".complete-unchecked-button").classList.add("hidden");
+            subtaskCard.querySelector(".complete-checked-button").classList.remove("hidden");
+            subtaskCard.querySelector(".delete-button").classList.add("hidden");
+        }
+
+        return subtaskCard;
+    }
+
+    //returns a task card loaded with the task info and necceary event listeners
+    function getTaskCard(taskId)
+    {
+        const taskCard = document.querySelector(".task-card.structure").cloneNode(true);
+        taskCard.classList.remove("structure", "hidden");
+
+        //assign task information and eventlisteners to elemenets
+        const taskInfo = todo.getTaskInfo(taskId);
+
+        //card
+        taskCard.setAttribute("id", "i" + taskId);
+        taskCard.addEventListener("click", handleTaskSelect)
+
+        //complete button listener and title
+        taskCard.querySelector(".complete-unchecked-button").addEventListener("click", handleCompleteTask);
+        taskCard.querySelector(".complete-checked-button").addEventListener("click", handleUncompleteTask);
+        taskCard.querySelector(".title").textContent = taskInfo.name;
+
+        //task date
+        if(taskInfo.date != "")
+            {
+                const taskDateContainer = taskCard.querySelector(".task-date")
+                taskDateContainer.textContent = taskCard.date
+                taskDateContainer.classList.remove("hidden");
+            }
+        
+        //task priotiry
+        if(taskInfo.priority != "No priority")
+            {
+                const taskPriorityContainer = taskCard.querySelector(".task-priority");
+                taskPriorityContainer.textContent = taskInfo.priority;
+                taskPriorityContainer.classList.remove("hidden");
+            }
+
+        //task completed status
+        taskCard.querySelector(".delete-button").addEventListener("click", handleDeleteTask);
+        if(taskInfo.completed)
+        {
+            //change visuals
+            taskCard.classList.add("completed-task");
+            taskCard.querySelector(".complete-unchecked-button").classList.add("hidden");
+            taskCard.querySelector(".complete-checked-button").classList.remove("hidden");
+            taskCard.querySelector(".delete-button").classList.add("hidden");
+        }
+
+        return taskCard;
+    }
+
     function loadTaskInfo(taskId)
     {
         const taskInfo = todo.getTaskInfo(taskId);
@@ -320,6 +433,48 @@ const todo = (function (){
         const taskPriorityValue = taskInfo.priority;
         const selector = `.task-priority-input[value="${taskPriorityValue}"]`;
         infoTaskContainer.querySelector(selector).checked = true;
+
+        //get subtask container and reset it
+        const subtasksContainer = infoTaskContainer.querySelector(".subtasks-container");
+        subtasksContainer.textContent = "";
+
+        //hide form in case it add subtask button was pressed before and there was no submission for the form to hide again, then show add button.
+        //also hide submit changes button in case it there were not changes not submitted before.
+        addSubtaskForm.classList.add("hidden");
+        addSubtaskButton.classList.remove("hidden");
+        submitTaskChangeButton.classList.add("hidden");
+
+        //loadsubtasks if it is a maintask
+        if(taskInfo.parentTaskId == null)
+        {   
+            //get subtask ids
+            const subtasksIds = taskInfo.subtasks;
+            
+            //load subtasks
+            const completedSubtasks = [];
+            for(let i=0;i<subtasksIds.length; i++)
+                {
+                    //load a task card
+                    const subtaskCard = getSubtaskCard(subtasksIds[i]);
+
+                    //if it is completed then add it to completed array to add the cards last
+                    if(subtaskCard.classList.contains(".completed"))
+                        {
+                            completedSubtasks.push(subtaskCard);
+                        }
+                    else
+                        subtasksContainer.append(subtaskCard);
+
+                }
+
+            //add completed tasks
+            for(let i=0;i<completedSubtasks.length; i++)
+            {
+                subtasksContainer.append(completedSubtasks[i]);
+            }
+        }
+        else
+            addSubtaskButton.classList.add("hidden");   
     }
  
     function handleNoteSelect(e)
@@ -355,6 +510,9 @@ const todo = (function (){
         //get list id
         const listId = listContainer.getAttribute("id").slice(1);
 
+        //get task card
+        const taskCard = e.target.closest(".task-card");
+
         //complete task
 
         let taskId
@@ -367,9 +525,15 @@ const todo = (function (){
             //load the info section again to update the box
             loadTaskInfo(listId);
         }
+        //check if the request came from a subtask in the info section // this was added in a rush it could be better
+        else if(changeTaskForm.getAttribute("id") == "i" + todo.getTaskInfo(e.target.closest(".task-card").getAttribute("id").slice(1)).parentTaskId)
+        {
+            taskId = taskCard.getAttribute("id").slice(1);
+            todo.completeTask(taskId)
+            loadTaskInfo(changeTaskForm.getAttribute("id").slice(1));
+        }
         else
         {
-            const taskCard = e.target.closest(".task-card");
             taskId = taskCard.getAttribute("id").slice(1);
             todo.completeTask(taskId);
 
@@ -390,6 +554,9 @@ const todo = (function (){
         //get list id
         const listId = listContainer.getAttribute("id").slice(1);
 
+        //get task card
+        const taskCard = e.target.closest(".task-card");
+
         //complete task
 
         let taskId
@@ -402,9 +569,15 @@ const todo = (function (){
             //load the info section again to update the box
             loadTaskInfo(listId);
         }
+        //check if the request came from a subtask in the info section // this was added in a rush it could be better
+        else if(changeTaskForm.getAttribute("id") == "i" + todo.getTaskInfo(e.target.closest(".task-card").getAttribute("id").slice(1)).parentTaskId)
+        {
+            taskId = taskCard.getAttribute("id").slice(1);
+            todo.uncompleteTask(taskId)
+            loadTaskInfo(changeTaskForm.getAttribute("id").slice(1));
+        }
         else
         {
-            const taskCard = e.target.closest(".task-card");
             taskId = taskCard.getAttribute("id").slice(1);
             todo.uncompleteTask(taskId);
 
@@ -540,48 +713,10 @@ const todo = (function (){
         for(let i =0; i<taskIds.length; i++)
             {
                 //get a task card
-                const taskCard = document.querySelector(".task-card.structure").cloneNode(true);
-                taskCard.classList.remove("structure", "hidden");
-
-                //assign task information and eventlisteners to elemenets
-
-                const taskInfo = todo.getTaskInfo(taskIds[i]);
-
-                //card
-                taskCard.setAttribute("id", "i" + taskIds[i]);
-                taskCard.addEventListener("click", handleTaskSelect)
-
-                //complete button listener and title
-                taskCard.querySelector(".complete-unchecked-button").addEventListener("click", handleCompleteTask);
-                taskCard.querySelector(".complete-checked-button").addEventListener("click", handleUncompleteTask);
-                taskCard.querySelector(".title").textContent = taskInfo.name;
-
-                //task date
-                if(taskInfo.date != "")
-                    {
-                        const taskDateContainer = taskCard.querySelector(".task-date")
-                        taskDateContainer.textContent = taskInfo.date
-                        taskDateContainer.classList.remove("hidden");
-                    }
+                const taskCard = getTaskCard(taskIds[i]);
                 
-                //task priotiry
-                if(taskInfo.priority != "No priority")
-                    {
-                        const taskPriorityContainer = taskCard.querySelector(".task-priority");
-                        taskPriorityContainer.textContent = taskInfo.priority;
-                        taskPriorityContainer.classList.remove("hidden");
-                    }
-
-                //task completed status
-                taskCard.querySelector(".delete-button").addEventListener("click", handleDeleteTask);
-                if(taskInfo.completed)
-                {
-                    //change visuals
-                    taskCard.classList.add("completed-task");
-                    taskCard.querySelector(".complete-unchecked-button").classList.add("hidden");
-                    taskCard.querySelector(".complete-checked-button").classList.remove("hidden");
-                    taskCard.querySelector(".delete-button").classList.add("hidden");
-                    
+                if(taskCard.classList.contains(".completed"))
+                {     
                     completedTasks.push(taskCard)
                 }
                 else
@@ -589,7 +724,7 @@ const todo = (function (){
 
                 //add it's subtasks if any
 
-                const subtasksIds = taskInfo.subtasks;
+                const subtasksIds = todo.getTaskInfo(taskIds[i]).subtasks;
                 
                 if(subtasksIds.length > 0)
                 {
@@ -603,55 +738,16 @@ const todo = (function (){
                     closeSubtasksButton.addEventListener("click", closeSubtasks);
 
                     //get a subtask container and assign the main subtask id to it but start with s instead of i
-                    const subtasksContainer = document.querySelector(".subtasks-container").cloneNode(true);
+                    const subtasksContainer = listContainer.querySelector(".subtasks-container").cloneNode(true);
                     subtasksContainer.classList.remove("structure");
                     subtasksContainer.setAttribute("id", "s" + taskIds[i]);
 
                     //add subtasks to subtaskscontainer
                     for(let j =0; j<subtasksIds.length; j++)
                     {
-                        const subtaskCard = document.querySelector(".task-card.subtask").cloneNode(true);
-                        subtaskCard.classList.remove("structure", "hidden");
-
-                        //assign task information and eventlisteners to elemenets
-
-                        const subtaskInfo = todo.getTaskInfo(subtasksIds[i]);
-
-                        //card
-                        subtaskCard.setAttribute("id", "i" + subtasksIds[i]);
-                        subtaskCard.addEventListener("click", handleTaskSelect)
-
-                        //complete button listener and title
-                        subtaskCard.querySelector(".complete-unchecked-button").addEventListener("click", handleCompleteTask);
-                        subtaskCard.querySelector(".complete-checked-button").addEventListener("click", handleUncompleteTask);
-                        subtaskCard.querySelector(".title").textContent = subtaskInfo.name;
-
-                        //task date
-                        if(subtaskInfo.date != "")
-                            {
-                                const taskDateContainer = subtaskCard.querySelector(".task-date")
-                                taskDateContainer.textContent = subtaskCard.date
-                                taskDateContainer.classList.remove("hidden");
-                            }
-                        
-                        //task priotiry
-                        if(subtaskInfo.priority != "No priority")
-                            {
-                                const taskPriorityContainer = subtaskCard.querySelector(".task-priority");
-                                taskPriorityContainer.textContent = subtaskInfo.priority;
-                                taskPriorityContainer.classList.remove("hidden");
-                            }
-
-                        //task completed status
-                        subtaskCard.querySelector(".delete-button").addEventListener("click", handleDeleteTask);
-                        if(subtaskInfo.completed)
-                        {
-                            //change visuals
-                            subtaskCard.classList.add("completed-task");
-                            subtaskCard.querySelector(".complete-unchecked-button").classList.add("hidden");
-                            subtaskCard.querySelector(".complete-checked-button").classList.remove("hidden");
-                            subtaskCard.querySelector(".delete-button").classList.add("hidden");
-                            
+                        const subtaskCard = getSubtaskCard(subtasksIds[j]);
+                        if(subtaskCard.classList.contains(".completed"))
+                        {                            
                             completedTasks.push(subtaskCard)
                         }
                         else
