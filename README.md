@@ -1,8 +1,8 @@
 # Todo-list
 <img src="https://github.com/user-attachments/assets/e85bb49e-3934-487c-b7d5-ab8c9b9c9a35">
 <img src="https://github.com/user-attachments/assets/99de4732-013c-4db5-b982-367f57dc9aee"> 
-## Description
 
+## Description
 This Todo list webapp is heavily inspired by the app tiktik. <br>
 It allows you to add tasks, edit their date and priotiry and also add description to them, <br>
 add subtasks withing tasks, create lists that contain tasks.<br>
