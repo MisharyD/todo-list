@@ -1,6 +1,6 @@
 # Todo-list
-<img src="https://github.com/MisharyD/todo-list/edit/main/appImage1.png" width="48">
-<img src="https://github.com/MisharyD/todo-list/edit/main/appImage2.png" width="48">
+<img src="https://github.com/user-attachments/assets/e85bb49e-3934-487c-b7d5-ab8c9b9c9a35" width="100" height="100">
+<img src="https://github.com/user-attachments/assets/99de4732-013c-4db5-b982-367f57dc9aee" width="100" height="100">
 ## Description:
 This Todo list webapp allows you to add tasks, edit their date and priotiry and also add description to them, <br>
 add subtasks withing tasks, create lists that contain tasks.<br>
