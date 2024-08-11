@@ -500,6 +500,7 @@ const todo = (function (){
         {
             //change visuals
             taskCard.classList.add("completed-task");
+            taskCard.classList.remove("task-card-hover");
             taskCard.querySelector(".complete-unchecked-button").classList.add("hidden");
             taskCard.querySelector(".complete-checked-button").classList.remove("hidden");
             taskCard.querySelector(".delete-button").classList.add("hidden");
@@ -945,6 +946,7 @@ const todo = (function (){
 
                 //get list card
                 const listCard = document.querySelector(".list-card.structure").cloneNode(true);
+                listCard.classList.add("list-hover");
                 listCard.classList.remove("structure", "hidden");
                 listCard.addEventListener("click", handleListSelect)
 
@@ -962,11 +964,14 @@ const todo = (function (){
         const listId = e.target.closest(".list").getAttribute("id").slice(1);
 
         //remove previous list's background 
-        const prevListId = listContainer.getAttribute("id");
-        document.querySelector("#"+prevListId).classList.remove("current-list");
+        const prevList = document.querySelector("#" + listContainer.getAttribute("id"));
+        prevList.classList.remove("current-list");
+        prevList.classList.add("list-hover")
 
         //add background to new list
-        document.querySelector("#i" + listId).classList.add("current-list");
+        const currList = document.querySelector("#i" + listId)
+        currList.classList.add("current-list");
+        currList.classList.remove("list-hover");
 
         loadList(listId);
     }
@@ -1008,6 +1013,7 @@ const todo = (function (){
         document.querySelector("#"+prevListId).classList.remove("current-list");
 
         //add background to new list
+        showCompletedButton.classList.remove("list-hover")
         document.querySelector("#i9999").classList.add("current-list");
         listContainer.setAttribute("id", "i9999")
         

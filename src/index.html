@@ -24,13 +24,13 @@
                 </svg>
                 <div class="list-title">Inbox</div>
             </div>
-            <div class="today list" id = "i1">
+            <div class="today list list-hover" id = "i1">
                 <svg class = "today-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M19 3H18V1H16V3H8V1H6V3H5C3.89 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.9 20.11 3 19 3M19 19H5V9H19V19M19 7H5V5H19V7Z" />
                 </svg>
                 <div class="list-title">Today</div>
             </div>
-            <div class="next7 list" id = "i2">
+            <div class="next7 list list-hover" id = "i2" >
                 <svg class = "next7-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M11,17L15,9V7H9V9H13L9,17M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3Z" />
                 </svg>
@@ -72,7 +72,7 @@
         <div class="all-lists-container">
         </div>
 
-        <div class="completed" id = "i9999"> <!--hopefully no one will add 9999 lists-->
+        <div class="completed list-hover" id = "i9999"> <!--hopefully no one will add 9999 lists-->
             <svg style = "width:20px; fill:white;"xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,5V19H5V5H19M10,17L6,13L7.41,11.58L10,14.17L16.59,7.58L18,9" />
             </svg> 
@@ -114,7 +114,7 @@
         </form> 
 
         <!--the structure are outside so that the notes and tasks container can be set empty-->
-        <div class="task-card structure hidden">
+        <div class="task-card task-card-hover structure hidden">
             <svg class="show-subtasks-button hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M14 16.94V12.94H5.08L5.05 10.93H14V6.94L19 11.94Z" />
             </svg>
@@ -156,7 +156,7 @@
             <div class="task-date"></div>
         </div>
 
-        <div class="task-card subtask structure hidden">
+        <div class="task-card subtask task-card-hover structure hidden">
             <svg class="show-subtasks-button hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M14 16.94V12.94H5.08L5.05 10.93H14V6.94L19 11.94Z" />
             </svg>

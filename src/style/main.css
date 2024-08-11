@@ -170,7 +170,7 @@
     cursor:pointer;
 }
 
-.task-card:hover
+.task-card-hover:hover
 {
     background-color: var(--hover-color);
 }

@@ -89,7 +89,7 @@
     border-radius: 8px;
 }
 
-.list:hover
+.list-hover:hover
 {
     cursor: pointer;
     background-color: var(--hover-color);
@@ -230,14 +230,6 @@
     padding:8px;
     border-radius: 8px;
 }
-
-.completed:hover
-{
-    background-color: var(--hover-color);
-    cursor: pointer;
-}
-
-
 
 .hidden
 {
