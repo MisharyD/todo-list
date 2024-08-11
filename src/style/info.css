@@ -35,11 +35,6 @@
 {
     width:22px;
     fill:var(--complete-button-color);
-}
-
-.complete-unchecked-button:hover
-{
-    fill: #7e7d7d;
     cursor: pointer;
 }
 
@@ -47,11 +42,6 @@
 {
     width:22px;
     fill:var(--complete-button-color);
-}
-
-.complete-checked-button:hover
-{
-    fill: #7e7d7d;
     cursor: pointer;
 }
 

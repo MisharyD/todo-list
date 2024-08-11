@@ -112,6 +112,28 @@
     outline:1px solid #4772FA;
 }
 
+.priority-container
+{
+    display: flex;
+    gap:0.5rem;
+    align-items: center;
+}
+
+.priority-container input[type='radio']:after
+{
+    accent-color: var(--complete-button-color);
+}
+
+.priority-container input[value="Low"]
+{
+    color:#4772FA;
+}
+
+.priority-container .low
+{
+    color:#4772FA;
+}
+
 .hidden
 {
     display: none;
@@ -136,7 +158,7 @@
 
 .show-subtasks-button
 {
-    width:15px;
+    width: 15px;
     fill:var(--complete-button-color);
     cursor:pointer;
 }
@@ -179,25 +201,39 @@
 {
     width:22px;
     fill:var(--complete-button-color);
-}
-
-.complete-unchecked-button:hover
-{
-    fill: #7e7d7d;
     cursor: pointer;
 }
+
+.complete-unchecked-button.low-priority
+{
+    fill:#4772FA;
+}
+
+.complete-unchecked-button.medium-priority
+{
+    fill:rgb(180, 180, 0);
+}
+
+
+.complete-unchecked-button.high-priority
+{
+    fill:rgb(255, 78, 78);
+}
+
 
 .complete-checked-button
 {
     width:22px;
     fill:var(--complete-button-color);
-}
-
-.complete-checked-button:hover
-{
-    fill: #7e7d7d;
     cursor: pointer;
 }
+
+.task-date
+{
+    color:#4772FA;
+    font-size: 18px;
+}
+
 
 .note-card
 {
@@ -235,7 +271,11 @@
 
 .subtasks-container
 {
+    display: flex;
+    flex-direction: column;
     margin-left: 30px;
+    gap:0.5rem;
+
 }
 
 .hidden

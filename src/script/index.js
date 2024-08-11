@@ -5,10 +5,12 @@ import "../style/sidebar.css"
 import "../style/main.css"
 import "../style/info.css"
 import { se } from "date-fns/locale"
+import { isToday, isWithinInterval, addDays, differenceInCalendarDays } from 'date-fns';
 
 const todo = (function (){
 
     const todo = new Manager();
+    todo.loadData();
 
     //main containers
     const allListsContainer = document.querySelector(".all-lists-container");
@@ -18,6 +20,10 @@ const todo = (function (){
     const infoNoteContainer = document.querySelector(".info-note");
     
     //listeners
+
+    //listeners for saving and deleteing data
+    const saveDataButton = document.querySelector(".save-data-button");
+    const deleteDataButton = document.querySelector(".delete-data-button");
 
     //listeners related to displaying things
     const dateToggleButton = document.querySelectorAll(".date-toggle");
@@ -66,6 +72,9 @@ const todo = (function (){
         showAddListFormButton.addEventListener("click", displayAddListForm);
         cancelListFormButton.addEventListener("click", closeAddListForm);
         
+        //listeners for saving and deleteing data
+        saveDataButton.addEventListener("click", saveData)
+        deleteDataButton.addEventListener("click", deleteData)
         
         //listeners for the main lists
         inboxButton.addEventListener("click", handleListSelect);
@@ -87,6 +96,34 @@ const todo = (function (){
         //load inbox and all lists in the side bar
         loadList(0);
         loadAllLists();
+    }
+
+    //functions for saving and deleteing data
+    function saveData()
+    {
+        todo.saveData();
+        const dataSavedContainer = document.querySelector(".data-saved")
+        dataSavedContainer.classList.remove("hidden");
+        setTimeout(removeSavedData, 3000);
+
+        function removeSavedData()
+        {
+            dataSavedContainer.classList.add("hidden");
+        }
+    }
+
+    function deleteData()
+    {
+        localStorage.removeItem("data");
+        const dataDeletedContainer = document.querySelector(".data-deleted");
+        dataDeletedContainer.classList.remove("hidden");
+        setTimeout(removeDeletedData, 3000);
+
+        function removeDeletedData()
+        {
+            dataDeletedContainer.classList.add("hidden");
+            location.reload();
+        }
     }
 
     //functions for displaying and closing things
@@ -155,8 +192,8 @@ const todo = (function (){
         subtasksContainer.classList.remove("hidden");
 
         //remove show subtask button and unhide close sub task button
-        showSubtasksButton.classList.add("hidden");
         taskCard.querySelector(".close-subtasks-button").classList.remove("hidden");
+        showSubtasksButton.classList.add("hidden");
     }
 
     function closeSubtasks(e)
@@ -172,8 +209,8 @@ const todo = (function (){
         subtasksContainer.classList.add("hidden");
 
         //remove close subtask button and add show sub task button
-        closeSubtasksButton.classList.add("hidden");
         taskCard.querySelector(".show-subtasks-button").classList.remove("hidden");
+        closeSubtasksButton.classList.add("hidden");
     }
 
     function displayAddsubtaskForm() 
@@ -323,20 +360,55 @@ const todo = (function (){
         subtaskCard.querySelector(".complete-checked-button").addEventListener("click", handleUncompleteTask);
         subtaskCard.querySelector(".title").textContent = subtaskInfo.name;
 
-        //task date
-        if(subtaskInfo.date != "")
+         //task date
+         if(subtaskInfo.date != "")
+        {
+            const taskDate = subtaskInfo.date;
+
+            const today = new Date();
+            const sevenDaysFromNow = addDays(today, 7);
+            const isInNext7Days = isWithinInterval(taskDate, { start: today, end: sevenDaysFromNow })
+
+            const taskDateContainer = subtaskCard.querySelector(".task-date")
+            taskDateContainer.classList.remove("hidden");
+            if(isToday(taskDate))
             {
-                const taskDateContainer = subtaskCard.querySelector(".task-date")
-                taskDateContainer.textContent = subtaskCard.date
-                taskDateContainer.classList.remove("hidden");
+                taskDateContainer.textContent = "Today"
             }
-        
+            else if(isInNext7Days)
+            {
+                const remaining = differenceInCalendarDays(taskDate, today);
+                taskDateContainer.textContent = "After " + remaining + " days"; 
+            }
+            else
+                taskDateContainer.textContent = taskDate;
+
+        }
+    
         //task priotiry
-        if(subtaskInfo.priority != "No priority")
+        const taskPriority = subtaskInfo.priority
+        if(taskPriority != "No priority")
             {
                 const taskPriorityContainer = subtaskCard.querySelector(".task-priority");
-                taskPriorityContainer.textContent = subtaskInfo.priority;
-                taskPriorityContainer.classList.remove("hidden");
+                const uncheckedButton = subtaskCard.querySelector(".complete-unchecked-button")
+                switch(taskPriority)
+                {
+                    case "Low":
+                    {
+                        uncheckedButton.classList.add("low-priority");
+                        break;
+                    }
+                    case"Medium":
+                    {
+                        uncheckedButton.classList.add("medium-priority");
+                        break;
+                    }
+                    case"High":
+                    {
+                        uncheckedButton.classList.add("high-priority");
+                        break;
+                    }
+                }
             }
 
         //task completed status
@@ -374,17 +446,52 @@ const todo = (function (){
         //task date
         if(taskInfo.date != "")
             {
+                const taskDate = taskInfo.date;
+
+                const today = new Date();
+                const sevenDaysFromNow = addDays(today, 7);
+                const isInNext7Days = isWithinInterval(taskDate, { start: today, end: sevenDaysFromNow })
+
                 const taskDateContainer = taskCard.querySelector(".task-date")
-                taskDateContainer.textContent = taskCard.date
                 taskDateContainer.classList.remove("hidden");
+                if(isToday(taskDate))
+                {
+                    taskDateContainer.textContent = "Today"
+                }
+                else if(isInNext7Days)
+                {
+                    const remaining = differenceInCalendarDays(taskDate, today);
+                    taskDateContainer.textContent = "After " + remaining + " days"; 
+                }
+                else
+                    taskDateContainer.textContent = taskDate;
+
             }
         
         //task priotiry
-        if(taskInfo.priority != "No priority")
+        const taskPriority = taskInfo.priority
+        if(taskPriority != "No priority")
             {
                 const taskPriorityContainer = taskCard.querySelector(".task-priority");
-                taskPriorityContainer.textContent = taskInfo.priority;
-                taskPriorityContainer.classList.remove("hidden");
+                const uncheckedButton = taskCard.querySelector(".complete-unchecked-button")
+                switch(taskPriority)
+                {
+                    case "Low":
+                    {
+                        uncheckedButton.classList.add("low-priority");
+                        break;
+                    }
+                    case"Medium":
+                    {
+                        uncheckedButton.classList.add("medium-priority");
+                        break;
+                    }
+                    case"High":
+                    {
+                        uncheckedButton.classList.add("high-priority");
+                        break;
+                    }
+                }
             }
 
         //task completed status
@@ -428,11 +535,69 @@ const todo = (function (){
         else
             infoTaskContainer.querySelector("textarea").value = taskInfo.description; 
 
-        infoTaskContainer.querySelector(".task-date-input").value = taskInfo.date; 
+        //task date
+        const taskDateContainer = changeTaskForm.querySelector(".task-date");
+        taskDateContainer.textContent = "" //reset
+        if(taskInfo.date != "")
+            {
+                //assign info to form
+                const taskDate = taskInfo.date;
+                infoTaskContainer.querySelector(".task-date-input").value = taskDate.date;
 
-        const taskPriorityValue = taskInfo.priority;
-        const selector = `.task-priority-input[value="${taskPriorityValue}"]`;
-        infoTaskContainer.querySelector(selector).checked = true;
+                //display info
+                const today = new Date();
+                const sevenDaysFromNow = addDays(today, 7);
+                const isInNext7Days = isWithinInterval(taskDate, { start: today, end: sevenDaysFromNow })
+
+                taskDateContainer.classList.remove("hidden");
+                if(isToday(taskDate))
+                {
+                    taskDateContainer.textContent = "Today"
+                }
+                else if(isInNext7Days)
+                {
+                    const remaining = differenceInCalendarDays(taskDate, today);
+                    taskDateContainer.textContent = "After " + remaining + " days"; 
+                }
+                else
+                    taskDateContainer.textContent = taskDate;
+
+            }
+        
+        //task priotiry
+        const taskPriority = taskInfo.priority
+
+        //reset
+        const uncheckedButton = changeTaskForm.querySelector(".complete-unchecked-button")
+        uncheckedButton.classList.remove("low-priority", "medium-priority", "high-priority");
+
+        if(taskPriority != "No priority")
+            {
+                //assign info to form
+                const taskPriorityValue = taskInfo.priority;
+                const selector = `.task-priority-input[value="${taskPriorityValue}"]`;
+                infoTaskContainer.querySelector(selector).checked = true;
+
+                //display info
+                switch(taskPriority)
+                {
+                    case "Low":
+                    {
+                        uncheckedButton.classList.add("low-priority");
+                        break;
+                    }
+                    case"Medium":
+                    {
+                        uncheckedButton.classList.add("medium-priority");
+                        break;
+                    }
+                    case"High":
+                    {
+                        uncheckedButton.classList.add("high-priority");
+                        break;
+                    }
+                }
+            }    
 
         //get subtask container and reset it
         const subtasksContainer = infoTaskContainer.querySelector(".subtasks-container");
@@ -458,7 +623,7 @@ const todo = (function (){
                     const subtaskCard = getSubtaskCard(subtasksIds[i]);
 
                     //if it is completed then add it to completed array to add the cards last
-                    if(subtaskCard.classList.contains(".completed"))
+                    if(subtaskCard.classList.contains("completed-task"))
                         {
                             completedSubtasks.push(subtaskCard);
                         }
@@ -523,23 +688,26 @@ const todo = (function (){
             todo.completeTask(taskId);
 
             //load the info section again to update the box
-            loadTaskInfo(listId);
+            loadTaskInfo(taskId);
         }
         //check if the request came from a subtask in the info section // this was added in a rush it could be better
-        else if(changeTaskForm.getAttribute("id") == "i" + todo.getTaskInfo(e.target.closest(".task-card").getAttribute("id").slice(1)).parentTaskId)
+        else if(taskCard)
         {
-            taskId = taskCard.getAttribute("id").slice(1);
-            todo.completeTask(taskId)
-            loadTaskInfo(changeTaskForm.getAttribute("id").slice(1));
-        }
-        else
-        {
-            taskId = taskCard.getAttribute("id").slice(1);
-            todo.completeTask(taskId);
-
-            //check if the info section for the same task that is requesting is complete. if it is, load the section again to update the checkbox in it. 
-            if("i" + taskId == changeTaskForm.getAttribute("id"))//i is added to task id so that even without slicing the id it works, if it sliced without the attribute having a value it generates an error
+            if(changeTaskForm.getAttribute("id") == "i" + todo.getTaskInfo(taskCard.getAttribute("id").slice(1)).parentTaskId)
+            {
+                taskId = taskCard.getAttribute("id").slice(1);
+                todo.completeTask(taskId)
                 loadTaskInfo(taskId);
+            }
+            else
+            {
+                taskId = taskCard.getAttribute("id").slice(1);
+                todo.completeTask(taskId);
+    
+                //check if the info section for the same task that is requesting is complete. if it is, load the section again to update the checkbox in it. 
+                if("i" + taskId == changeTaskForm.getAttribute("id"))//i is added to task id so that even without slicing the id it works, if it sliced without the attribute having a value it generates an error
+                    loadTaskInfo(taskId);
+            }
         }
 
         //load list again to update the checkbox
@@ -567,23 +735,26 @@ const todo = (function (){
             todo.uncompleteTask(taskId);
 
             //load the info section again to update the box
-            loadTaskInfo(listId);
+            loadTaskInfo(taskId);
         }
-        //check if the request came from a subtask in the info section // this was added in a rush it could be better
-        else if(changeTaskForm.getAttribute("id") == "i" + todo.getTaskInfo(e.target.closest(".task-card").getAttribute("id").slice(1)).parentTaskId)
+        else if(taskCard)
         {
-            taskId = taskCard.getAttribute("id").slice(1);
-            todo.uncompleteTask(taskId)
-            loadTaskInfo(changeTaskForm.getAttribute("id").slice(1));
-        }
-        else
-        {
-            taskId = taskCard.getAttribute("id").slice(1);
-            todo.uncompleteTask(taskId);
-
-            //check if the info section for the same task that is requesting is complete. if it is, load the section again to update the checkbox in it. 
-            if("i" + taskId == changeTaskForm.getAttribute("id"))//i is added to task id so that even without slicing the id it works, if it sliced without the attribute having a value it generates an error
+            //check if the request came from a subtask in the info section // this was added without much thinking it could be better
+            if(changeTaskForm.getAttribute("id") == "i" + todo.getTaskInfo(taskCard.getAttribute("id").slice(1)).parentTaskId)
+            {
+                taskId = taskCard.getAttribute("id").slice(1);
+                todo.uncompleteTask(taskId)
                 loadTaskInfo(taskId);
+            }
+            else
+            {
+                taskId = taskCard.getAttribute("id").slice(1);
+                todo.uncompleteTask(taskId);
+    
+                //check if the info section for the same task that is requesting is complete. if it is, load the section again to update the checkbox in it. 
+                if("i" + taskId == changeTaskForm.getAttribute("id"))//i is added to task id so that even without slicing the id it works, if it sliced without the attribute having a value it generates an error
+                    loadTaskInfo(taskId);
+            }
         }
         
         //if the request came from the completed list, load the completed list again 
@@ -647,7 +818,7 @@ const todo = (function (){
         const dialog  = e.target.closest(".add-list-form");
         const name = dialog.querySelector("input[name='name']").value;
         
-        todo.addList(name);
+        todo.addList({name:name});
 
         closeAddListForm();
         loadAllLists();
@@ -715,17 +886,19 @@ const todo = (function (){
                 //get a task card
                 const taskCard = getTaskCard(taskIds[i]);
                 
-                if(taskCard.classList.contains(".completed"))
+                if(taskCard.classList.contains("completed-task"))
                 {     
                     completedTasks.push(taskCard)
                 }
                 else
+                {
                     listTaskNoteContainer.append(taskCard);
+                }
 
                 //add it's subtasks if any
 
                 const subtasksIds = todo.getTaskInfo(taskIds[i]).subtasks;
-                
+                const completedSubtasks = [];
                 if(subtasksIds.length > 0)
                 {
                     //assign button to display subtasks
@@ -746,19 +919,19 @@ const todo = (function (){
                     for(let j =0; j<subtasksIds.length; j++)
                     {
                         const subtaskCard = getSubtaskCard(subtasksIds[j]);
-                        if(subtaskCard.classList.contains(".completed"))
+                        if(subtaskCard.classList.contains("completed-task"))
                         {                            
-                            completedTasks.push(subtaskCard)
+                            completedSubtasks.push(subtaskCard)
                         }
                         else
                             subtasksContainer.append(subtaskCard);
                     }
+                    subtasksContainer.append(...completedSubtasks);
                     listTaskNoteContainer.append(subtasksContainer);
                 }
 
             }
-            for(let i =0;i <completedTasks.length;i++)
-                listTaskNoteContainer.append(completedTasks[i]);
+            listTaskNoteContainer.append(...completedTasks);
     }
 
     function loadAllLists()

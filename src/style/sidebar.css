@@ -10,6 +10,43 @@
     border-right: 1px solid var(--border-color);
 }
 
+.save-data-button
+{
+    width:30px;
+    fill: white;
+    cursor: pointer;
+}
+
+.save-data-button:hover
+{
+    fill:#cfc3c3
+}
+
+
+.data-saved
+{
+    color:green;
+    font-size: 20px;
+}
+
+.data-deleted
+{
+    color:rgb(125, 2, 2);
+    font-size: 20px;
+}
+
+.delete-data-button
+{
+    width:30px;
+    fill:white;
+    cursor: pointer;
+}
+
+.delete-data-button:hover
+{
+    fill:#cfc3c3
+}
+
 .inbox-icon
 {
     width: var(--main-icon-width);

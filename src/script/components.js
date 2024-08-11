@@ -7,24 +7,19 @@ class Task {
 
     constructor(name, description, date, priority, completed, parentTaskId, id)
     {
+        this._name = name;
+        this._description = description;
+        this._date = date;
+        this._priority = priority;
+        this._completed = completed;
+        this._parentTaskId = parentTaskId 
+
         //used when creating a task normally
         if(id == null){
-            this._name = name;
-            this._description = description;
-            this._date = date;
-            this._priority = priority;
-            this._completed = completed;
-            this._parentTaskId = parentTaskId 
             this._id = Task.currentId++;
         }
         //used when loading data
         else{
-            this._name = name;
-            this._description = description;
-            this._date = date;
-            this._priority = priority;
-            this._completed = completed;
-            this._parentTaskId = parentTaskId 
             this._id = parseInt(id)
 
             //used to know what is the max id after loading all tasks
@@ -111,19 +106,18 @@ class List {
     static allIds = new Array();
 
     constructor(name, id) {
+        this._name = name;
+        this._notes = {};
+        this._tasks = {};
+
         //used when creating a list normally
         if(id == null){
-            this._name = name;
-            this._notes = {};
-            this._tasks = {};
             this._id = List.currentId++;
         }
         //used when loading data
         else{
-            this._name = name;
-            this._notes = {};
-            this._tasks = {};
             this._id = parseInt(id);
+
             List.allIds.push(parseInt(id));
         }
     }
@@ -183,15 +177,15 @@ class Note {
     static allIds = new Array();
 
     constructor(name, description, id){
+        this._name = name;
+        this._description = description;
+
         //used when creating a note normally
         if(id == null){
-            this._name = name;
-            this._description = description;
             this._id = Note.currentId++;
+            console.log("note"+Note.currentId)
         }
         else{
-            this._name = name;
-            this._description = description;
             this._id = parseInt(id);
 
             Note.allIds.push(parseInt(id));
@@ -219,6 +213,7 @@ class Note {
     }
 
     static updateCurrentId(){
+        console.log(Note.currentId)
         Note.currentId = Math.max(...Note.allIds) + 1;
     }
 }

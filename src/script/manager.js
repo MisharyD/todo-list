@@ -34,7 +34,7 @@ export default class Manager {
         if(listId == 1 || listId == 2)//if the list is today or next7 then added it to inbox instead
             {
                 this._inbox.addTask(task)
-                this.#addToTodayAndNext7(task);
+                this.#updateToTodayAndNext7(task);
                 return true;
             }
         //other list
@@ -44,7 +44,7 @@ export default class Manager {
             if (list)
             {
                 list.addTask(task);
-                this.#addToTodayAndNext7(task);
+                this.#updateToTodayAndNext7(task);
                 return task.id;
             }
             else
@@ -55,7 +55,7 @@ export default class Manager {
     }
 
     //add task to day to today list or next 7 days list if the date match for said lists.
-    #addToTodayAndNext7(task)
+    #updateToTodayAndNext7(task)
     {
         const date = task.date;
 
@@ -64,9 +64,22 @@ export default class Manager {
         const isInNext7Days = isWithinInterval(date, { start: today, end: sevenDaysFromNow });
 
         if(isToday(date))
-            this._today.addTask(task);
+            {
+                //if it not already in the list add it
+                if(!(task.id in this._today._tasks))
+                    this._today.addTask(task);
+            }
+        else
+            this._today.deleteTask(task);
         if(isInNext7Days)
-            this._next7.addTask(task);
+            {
+                //if it not already in the list add it
+                if(!(task.id in this._next7._tasks))
+                    this._next7.addTask(task);
+
+            }
+        else
+            this._next7.deleteTask(task);
     }
 
     //add subtask in another task. mainTask is the parent task. returns task id if operation done successfully. otherwise false
@@ -81,6 +94,7 @@ export default class Manager {
     
             //add subtask to the subtask array in the maintask
             mainTask.addSubtask(subtask);
+            this.#updateToTodayAndNext7(subtask);
 
             return subtask.id;
         }
@@ -99,6 +113,8 @@ export default class Manager {
             task.description = description;
             task.date = date;
             task.priority = priority;
+
+            this.#updateToTodayAndNext7(task);
             
             return true;
         }
@@ -123,9 +139,9 @@ export default class Manager {
 
     
     //add new list, returns list id
-    addList(name = "") 
+    addList({name = "", id = null}) 
     {
-        const list = new List(name);
+        const list = new List(name, id);
         this._allLists[list.id] = list;
         return list.id;
     }
@@ -181,10 +197,15 @@ export default class Manager {
             {
                 const parentTask = this._allTasks[parentTaskId]
                 parentTask.removeSubtask(task);
+                for(const listId in this._allLists)
+                    {
+                        this._allLists[listId].deleteTask(task)
+                    }
             }
-            //not subtask, delete the task from any list that contains it
+            //not subtask, delete the task from the list that contains
             else
             {
+                //currently it can only be at 2 lists at the same, inbox and today for example
                 for(const listId in this._allLists)
                 {
                     this._allLists[listId].deleteTask(task)
@@ -199,8 +220,7 @@ export default class Manager {
         else
             return false;
     }
-
-    
+   
     //change complete boolean of task to true given task id. returns true if done successfully. otherwise false
     completeTask(taskId)
     {
@@ -252,9 +272,9 @@ export default class Manager {
 
 
     //create new note and add to list, if no list is provided then add to inbox. returns note id if done successfully. otherwise false
-    addNote({name = "", description = ""}, listId = null) 
+    addNote({name = "", description = "", id = null}, listId = null) 
     {
-        const note = new Note(name, description);
+        const note = new Note(name, description, id);
 
         //default list 
         if(listId == null)
@@ -277,7 +297,6 @@ export default class Manager {
         }
     }
 
-    
     //delete note given noteId and the list id that contains it. returns true if done successfully. otherwise false. 
     //list id is askes to save time because a note can only exist in 1 list.
     deleteNote(noteId, listId) 
@@ -481,7 +500,7 @@ export default class Manager {
                 
                 //add tasks
                 for(const taskId in allListsJson[listId]._tasks)
-                        list.addTask(allTasks[taskId])
+                    list.addTask(allTasks[taskId])
                 
                 //add notes
                 for(const noteId in allListsJson[listId]._notes)
