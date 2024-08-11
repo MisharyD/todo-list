@@ -22,10 +22,13 @@ const todo = (function (){
     //listeners
 
     //listeners for saving and deleteing data
+
     const saveDataButton = document.querySelector(".save-data-button");
     const deleteDataButton = document.querySelector(".delete-data-button");
 
     //listeners related to displaying things
+
+    //the toggle for priority input and date is set for queryAll because of the change task form and add task form.
     const dateToggleButton = document.querySelectorAll(".date-toggle");
     const priorityToggleButton = document.querySelectorAll('.priority-flag-button');
     const showAddListFormButton = document.querySelector(".add-list-button");
@@ -36,6 +39,7 @@ const todo = (function (){
     const addSubtaskButton = document.querySelector(".add-subtask-button");
 
     //listeners for the main lists
+
     const inboxButton = document.querySelector(".inbox");
     const todayButton = document.querySelector(".today");
     const next7Button = document.querySelector(".next7");
@@ -48,6 +52,8 @@ const todo = (function (){
     const addSubtaskForm = document.querySelector(".add-subtask-form");
 
     //listeneres related to forms input
+
+    //the 'infosectionbutton' is specified specifically because the other check buttons are added dynamicly. 
     const infoSectionUncheckedButton = document.querySelector(".change-task-form .complete-unchecked-button");
     const infoSectionCheckedButton = document.querySelector(".change-task-form .complete-checked-button");
     const submitTaskChangeButton = document.querySelector(".submit-change-task-button");
@@ -130,13 +136,13 @@ const todo = (function (){
 
     function displayAddListForm()
     {
-        addListForm.show();
+        addListForm.showModal();
     }
     
     function closeAddListForm()
     {
         addListForm.querySelector('input[name="name"]').value = "";
-        addListForm.close();
+        addListForm.closeModal();
     }
 
     function toggleDateInput(e)
@@ -827,6 +833,10 @@ const todo = (function (){
 
     }
 
+    /*
+    visuals for completing task is handles at loadlist because the base taskcard do not have completed visuals 
+    and if it is handled at complete task function it will only handle one card. 
+    */
     //loads list's tasks and notes and assign event listeners to cards
     function loadList(listId)
     {
@@ -834,6 +844,11 @@ const todo = (function (){
         listTaskNoteContainer.textContent = "";
 
         //necessary if coming from complete list
+        /* 
+        temporary solution so that both forms do not appear at the same time if adding a note. 
+        because adding remove hidden from one the forms ruins for the other when adding a note or a taskm, 
+        it will be akward if you came from completed because you will need to press add tasks or notes for the form to appear.
+        */
         listContainer.querySelector(".toggle-tasks-notes-container").classList.remove("hidden");
             
         //get list info;

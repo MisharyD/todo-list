@@ -1,7 +1,6 @@
 import { Task, List, Note } from  "./components"
 import { isToday, isWithinInterval, addDays } from 'date-fns';
 
-
 //acts as a save file and as task manager, contains functions for adding, deleting tasks and lists. 
 //changing info about a task or a list. contains an array for all tasks, lists and notes. 
 export default class Manager {
@@ -104,6 +103,7 @@ export default class Manager {
 
 
     //change existing task info given all information about a task. returns true if operation done successfully. otherwise false
+    //only name, description, date, priority because there are other functions for the other attributes(besides parent task)
     changeTaskInfo(taskId, name, description, date, priority) 
     {
         const task = this._allTasks[taskId];
@@ -245,7 +245,6 @@ export default class Manager {
         return false;
     }
 
-
     //move task from list to another list. returns true if done successfully. otherwise false
     moveTaskFromList(taskId, fromListId, toListId) 
     {
@@ -269,7 +268,6 @@ export default class Manager {
         }
         return false;
     }
-
 
     //create new note and add to list, if no list is provided then add to inbox. returns note id if done successfully. otherwise false
     addNote({name = "", description = "", id = null}, listId = null) 
@@ -329,7 +327,6 @@ export default class Manager {
         return Object.keys(this._allLists);
     }
 
-    
     //if list exists return list information including all it's tasks and notes ids, given list id, otherwise return null 
     getListInfo(listId) 
     {
