@@ -1,6 +1,6 @@
 # Todo-list
-![Todo List - Google Chrome 8_11_2024 9_58_24 PM](https://github.com/user-attachments/assets/e8b3215d-0332-4f18-842d-e409438bc75e)
-![Todo List - Google Chrome 8_11_2024 9_57_28 PM](https://github.com/user-attachments/assets/8b62d8d4-6b1c-4ff0-afde-21f0dcf42303)
+![Todo List - Google Chrome 8_11_2024 9_58_24 PM](https://github.com/user-attachments/assets/e8b3215d-0332-4f18-842d-e409438bc75e | width=100)
+![Todo List - Google Chrome 8_11_2024 9_57_28 PM](https://github.com/user-attachments/assets/8b62d8d4-6b1c-4ff0-afde-21f0dcf42303 | width=100)
 ## Description:
 This Todo list webapp allows you to add tasks, edit their date and priotiry and also add description to them, <br>
 add subtasks withing tasks, create lists that contain tasks.<br>
