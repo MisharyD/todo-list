@@ -1,6 +1,6 @@
 # Todo-list
-![Todo List - Google Chrome 8_11_2024 9_58_24 PM](https://github.com/user-attachments/assets/e3165688-e7d5-4300-ba23-b1cfc499136f)
-![Todo List - Google Chrome 8_11_2024 9_57_28 PM](https://github.com/user-attachments/assets/7c8c9c30-daa5-4910-a3df-a0cee491ba7b)
+![Todo List - Google Chrome 8_11_2024 9_58_24 PM](https://github.com/user-attachments/assets/e8b3215d-0332-4f18-842d-e409438bc75e)
+![Todo List - Google Chrome 8_11_2024 9_57_28 PM](https://github.com/user-attachments/assets/8b62d8d4-6b1c-4ff0-afde-21f0dcf42303)
 ## Description:
 This Todo list webapp allows you to add tasks, edit their date and priotiry and also add description to them, <br>
 add subtasks withing tasks, create lists that contain tasks.<br>
@@ -24,5 +24,5 @@ DOM:<br>
 - show and hide subtasks button sometimes glitch if pressed too fast or something, I dont know what is causing it.<br>
 - Saving data should be done after every action.<br>
 - I am not sure if this still happens or not, but sometimes notes loaded from local storage get wrong ids and everything goes wrong.<br>
-
+- tasks displayed in the right should have a selected background color, but it was just too much of a pain to implement.
 
