@@ -142,7 +142,7 @@ const todo = (function (){
     function closeAddListForm()
     {
         addListForm.querySelector('input[name="name"]').value = "";
-        addListForm.closeModal();
+        addListForm.close();
     }
 
     function toggleDateInput(e)
