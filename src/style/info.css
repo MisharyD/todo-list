@@ -60,29 +60,19 @@
     font-size: 18px;
     border: 0px;
     border-radius: 8px;
-    background-color: var(--hover-color);
+    outline:0px;
+    background-color: var(--main-background-color);
     padding:8px 12px;  
-}
-
-.info-task .change-task-form .title:focus 
-{
-    outline: 1px solid #4772FA;
 }
 
 .info-task .change-task-form .description 
 {
     font-size: 18px;
-    background-color: var(--hover-color);
+    background-color: var(--main-background-color);
     padding:8px;
     border:0px;
-    border-radius: 8px;;
-}
-
-.info-task 
-
-.info-task .change-task-form .description:focus 
-{
-    outline: 1px solid #4772FA;    
+    border-radius: 8px;
+    outline:0px;
 }
 
 .info-task .submit-change-task-button
@@ -143,21 +133,18 @@
     font-size: 18px;
     border: 0px;
     border-radius: 8px;
-    background-color: var(--hover-color);
+    outline: 0px;
+    background-color: var(--main-background-color);
     padding:8px 12px;   
-}
-
-.info-task .change-note-form .title:focus 
-{
-    outline: 1px solid #4772FA;
 }
 
 .info-note .change-note-form .description 
 {
     font-size: 18px;
-    background-color: var(--hover-color);
+    background-color: var(--main-background-color);
     border:0px;
     border-radius: 8px;
+    outline: 0px;
 }
 .info-note .change-note-form .description:focus 
 {
@@ -177,6 +164,13 @@
 .info .subtasks-container
 {
     margin:0px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 12px;
+}
+
+.subtasks-container .task-card
+{
+    border: 0px;
 }
 
 .hidden

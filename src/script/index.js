@@ -338,7 +338,9 @@ const todo = (function (){
 
 
         //get task information
-        const taskId = e.target.closest(".task-card").getAttribute("id").slice(1);
+        const taskCard = e.target.closest(".task-card")
+        const taskId = taskCard.getAttribute("id").slice(1);
+
         loadTaskInfo(taskId);
     }
 
@@ -531,20 +533,21 @@ const todo = (function (){
             infoSectionCheckedButton.classList.add("hidden");
         }
 
-        if(taskInfo.description == "")
-            infoTaskContainer.querySelector("textarea").value = "Description..."; 
-        else
+        if(!taskInfo.description == "")
             infoTaskContainer.querySelector("textarea").value = taskInfo.description; 
 
         //task date
+
+        //reset
         const taskDateContainer = changeTaskForm.querySelector(".task-date");
-        taskDateContainer.textContent = "" //reset
+        taskDateContainer.textContent = ""
+
+        //assign info to form
+        const taskDate = taskInfo.date;
+        infoTaskContainer.querySelector(".task-date-input").value = taskDate;
+
         if(taskInfo.date != "")
             {
-                //assign info to form
-                const taskDate = taskInfo.date;
-                infoTaskContainer.querySelector(".task-date-input").value = taskDate.date;
-
                 //display info
                 const today = new Date();
                 const sevenDaysFromNow = addDays(today, 7);
@@ -572,13 +575,13 @@ const todo = (function (){
         const uncheckedButton = changeTaskForm.querySelector(".complete-unchecked-button")
         uncheckedButton.classList.remove("low-priority", "medium-priority", "high-priority");
 
+        //assign info to form
+        const taskPriorityValue = taskInfo.priority;
+        const selector = `.task-priority-input[value="${taskPriorityValue}"]`;
+        infoTaskContainer.querySelector(selector).checked = true;
+
         if(taskPriority != "No priority")
             {
-                //assign info to form
-                const taskPriorityValue = taskInfo.priority;
-                const selector = `.task-priority-input[value="${taskPriorityValue}"]`;
-                infoTaskContainer.querySelector(selector).checked = true;
-
                 //display info
                 switch(taskPriority)
                 {
@@ -663,9 +666,7 @@ const todo = (function (){
         //assign note info to form values
         infoNoteContainer.querySelector("input[name='name']").value = noteInfo.name; 
 
-        if(noteInfo.description == "")
-            infoNoteContainer.querySelector("textarea").value = "Description..."; 
-        else
+        if(!noteInfo.description == "")
             infoNoteContainer.querySelector("textarea").value = noteInfo.description; 
     }
     
